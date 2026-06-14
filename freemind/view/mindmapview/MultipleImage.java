@@ -46,6 +46,9 @@ public class MultipleImage extends ImageIcon {
 	};
 
 	public void addImage(ImageIcon image) {
+		if (image == null) {
+			return;
+		}
 		mImages.add(image);
 		setImage(image.getImage());
 		isDirty = true;

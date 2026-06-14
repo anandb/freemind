@@ -16,14 +16,15 @@
 	<property name="freemind.buildnumber.file" value="version.properties"/>
 	<property name="freemind.installer_year" value="2009"/>
 	<property name="src" location="."/>
+	<property name="acc_build" location="accessories/plugins/build.xml"/>
 	<property name="src_base_for_post" location="../" />
-	<property name="build" location="../bin/classes" />
-	<property name="testbuild" location="../bin/testclasses" />
-	<property name="acc_build" location="accessories/plugins/build.xml" />
-	<property name="dist" location="../bin/dist" />
+	<property name="build" location="target/classes" />
+	<property name="testbuild" location="target/testclasses" />
+	<property name="ver" value="1.1.0" />
+	<property name="dist" location="target/dist" />
 	<property name="dist.lib" location="${dist}/lib" />
 	<property name="dist_macos_name" value="FreeMind_${ver}" />
-	<property name="dist_macos_base" location="../bin/dist_macos" />
+	<property name="dist_macos_base" location="target/dist_macos" />
 	<property name="dist_macos" location="${dist_macos_base}/${dist_macos_name}" />
 	<property name="dist_macos_app_name" value="FreeMind.app" />
 	<property name="dist_macos_app" location="${dist_macos}/${dist_macos_app_name}"/>
@@ -227,12 +228,6 @@
 			</fileset>
 		</copy>
 		<chmod file="${dist}/freemind.sh" perm="u+rx"/>
-		<copy todir="${dist}">
-			<fileset dir="${src}/windows-launcher">
-				<include name="FreeMind.exe"/>
-				<include name="FreeMind64.exe"/>
-			</fileset>
-		</copy>
 		<mkdir dir="${dist}/doc" />
 		<copy todir="${dist}/doc">
 			<fileset dir="${src}/doc/">
@@ -274,13 +269,7 @@
 		<condition property="isMacOs">
 			<os family="mac"/>
 		</condition>
-		<antcall target="dist_icon"/>
 		<antcall target="dist_macos"/>
-	</target>
-
-	<target name="dist_icon">
-		<!--		<copy file="${src}/windows-launcher/Freemind_light_bulb.exe"
-			tofile="${dist}/Freemind.exe" overwrite="true"/> -->
 	</target>
 
 	<target name="dist_macos" if="isMacOs">
@@ -525,6 +514,7 @@
 				<include name="images/icons/*.png"/>
 				<include name="images/icons/*.svg"/>
 				<include name="*.properties"/>
+				<include name="FlatLaf.properties"/>
 				<exclude name="Resources_*.properties"/>
 				<!--				<include name="*.xml"/>
 				<exclude name="build.xml"/> -->
@@ -563,7 +553,7 @@
 
 	<target name="clean">
 		<!-- Eclipse target: -->
-		<delete dir="bin/classes"  quiet="true"/>
+		<delete dir="target/classes"  quiet="true"/>
 		<delete dir="${build}"  quiet="true"/>
 		<delete dir="${testbuild}"  quiet="true"/>
 		<delete dir="${dist}"  quiet="true"/>
@@ -838,7 +828,6 @@
 		<!-- Extract main libraries and plugin jars -->
 		<unzip dest="${build}/uberjar-temp">
 			<fileset dir="${src}/lib" includes="*.jar" excludes="junit.jar,appbundler-1.0.jar,jarbundler-2.0.0.jar"/>
-			<fileset dir="${src}/lib/SimplyHTML" includes="*.jar"/>
 			<fileset dir="${src}/lib/jibx" includes="*.jar" excludes="bcel.jar,jibx-bind.jar,jibx-extras.jar"/>
 			<fileset dir="${src}/plugins" includes="**/*.jar" excludes="**/*_src.jar,**/xerces_2_5_0.jar,**/xml-apis.jar"/>
 		</unzip>
@@ -863,6 +852,7 @@
 			<fileset dir="${src}">
 				<include name="images/**"/>
 				<include name="freemind.properties"/>
+				<include name="FlatLaf.properties"/>
 				<include name="version.properties"/>
 				<include name="patterns.xml"/>
 				<include name="patterns_updater.xslt"/>

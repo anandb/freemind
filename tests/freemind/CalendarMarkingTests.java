@@ -1,7 +1,8 @@
 package tests.freemind;
 
-import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.Set;
 
 import accessories.plugins.time.CalendarMarkingEvaluator;
@@ -10,6 +11,12 @@ import freemind.controller.actions.generated.instance.CalendarMarking;
 import freemind.controller.actions.generated.instance.CalendarMarkings;
 
 public class CalendarMarkingTests extends FreeMindTestBase {
+	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("d.M.yyyy", Locale.US);
+
+	private long parseDate(String dateStr) throws Exception {
+		return DATE_FORMAT.parse(dateStr).getTime();
+	}
+
 	public void testCalendarMarkingEmpty() throws Exception {
 		CalendarMarkings result = (CalendarMarkings) XmlBindingTools.getInstance().unMarshall("<calendar_markings/>");
 		assertEquals(0, result.sizeCalendarMarkingList());
@@ -28,7 +35,7 @@ public class CalendarMarkingTests extends FreeMindTestBase {
 	}
 
 	public void testCalendarMarkingDouble() throws Exception {
-		long otherTime = DateFormat.getDateInstance().parse("1.1.1970").getTime();
+		long otherTime = parseDate("1.1.1970");
 		CalendarMarkings result = (CalendarMarkings) XmlBindingTools.getInstance().unMarshall("<calendar_markings>" +
 				"  <calendar_marking name='bla' color='#ff69b4' start_date='1437213300000' repeat_type='never'/>" +
 				"  <calendar_marking name='bla2' color='#ff69b5' start_date='"+otherTime + "' repeat_type='never'/>" +
@@ -49,8 +56,8 @@ public class CalendarMarkingTests extends FreeMindTestBase {
 	}
 
 	public void testCalendarMarkingRepeatWeekly() throws Exception {
-		long startTime = DateFormat.getDateInstance().parse("5.7.2015").getTime();
-		long endTime = DateFormat.getDateInstance().parse("19.7.2015").getTime();
+		long startTime = parseDate("5.7.2015");
+		long endTime = parseDate("19.7.2015");
 		String inputString = "<calendar_markings>" +
 				"  <calendar_marking name='bla2' color='#ff69b5' start_date='"+startTime + "' end_date='"+endTime + "' " +
 						"repeat_type='weekly' repeat_each_n_occurence='1' first_occurence='0'/>" +
@@ -75,8 +82,8 @@ public class CalendarMarkingTests extends FreeMindTestBase {
 	}
 
 	public void testCalendarMarkingRepeatBeWeekly() throws Exception {
-		long startTime = DateFormat.getDateInstance().parse("5.7.2015").getTime();
-		long endTime = DateFormat.getDateInstance().parse("19.7.2015").getTime();
+		long startTime = parseDate("5.7.2015");
+		long endTime = parseDate("19.7.2015");
 		CalendarMarkings result = (CalendarMarkings) XmlBindingTools.getInstance().unMarshall("<calendar_markings>" +
 				"  <calendar_marking name='bla2' color='#ff69b5' start_date='"+startTime + "' end_date='"+endTime + "' " +
 				"repeat_type='weekly' repeat_each_n_occurence='2' first_occurence='0'/>" +
@@ -98,8 +105,8 @@ public class CalendarMarkingTests extends FreeMindTestBase {
 	}
 	
 	public void testCalendarMarkingRepeatDaily() throws Exception {
-		long startTime = DateFormat.getDateInstance().parse("5.7.2015").getTime();
-		long endTime = DateFormat.getDateInstance().parse("19.7.2015").getTime();
+		long startTime = parseDate("5.7.2015");
+		long endTime = parseDate("19.7.2015");
 		CalendarMarkings result = (CalendarMarkings) XmlBindingTools.getInstance().unMarshall("<calendar_markings>" +
 				"  <calendar_marking name='bla2' color='#ff69b5' start_date='"+startTime + "' end_date='"+endTime + "' " +
 				"repeat_type='daily' repeat_each_n_occurence='1' first_occurence='0'/>" +
@@ -113,8 +120,8 @@ public class CalendarMarkingTests extends FreeMindTestBase {
 		assertNotNull(ev.isMarked(cal));
 	}
 	public void testCalendarMarkingRepeatMonthly() throws Exception {
-		long startTime = DateFormat.getDateInstance().parse("5.7.2015").getTime();
-		long endTime = DateFormat.getDateInstance().parse("5.8.2015").getTime();
+		long startTime = parseDate("5.7.2015");
+		long endTime = parseDate("5.8.2015");
 		CalendarMarkings result = (CalendarMarkings) XmlBindingTools.getInstance().unMarshall("<calendar_markings>" +
 				"  <calendar_marking name='bla2' color='#ff69b5' start_date='"+startTime + "' end_date='"+endTime + "' " +
 				"repeat_type='monthly' repeat_each_n_occurence='1' first_occurence='0'/>" +
@@ -130,8 +137,8 @@ public class CalendarMarkingTests extends FreeMindTestBase {
 		assertNull(ev.isMarked(cal));
 	}
 	public void testCalendarMarkingRepeatYearly() throws Exception {
-		long startTime = DateFormat.getDateInstance().parse("5.7.2015").getTime();
-		long endTime = DateFormat.getDateInstance().parse("5.7.2016").getTime();
+		long startTime = parseDate("5.7.2015");
+		long endTime = parseDate("5.7.2016");
 		CalendarMarkings result = (CalendarMarkings) XmlBindingTools.getInstance().unMarshall("<calendar_markings>" +
 				"  <calendar_marking name='bla2' color='#ff69b5' start_date='"+startTime + "' end_date='"+endTime + "' " +
 				"repeat_type='yearly' repeat_each_n_occurence='1' first_occurence='0'/>" +
@@ -147,8 +154,8 @@ public class CalendarMarkingTests extends FreeMindTestBase {
 		assertNull(ev.isMarked(cal));
 	}
 	public void testCalendarMarkingRepeatYearlyEveryNthDay() throws Exception {
-		long startTime = DateFormat.getDateInstance().parse("30.1.2015").getTime();
-		long endTime = DateFormat.getDateInstance().parse("29.2.2016").getTime();
+		long startTime = parseDate("30.1.2015");
+		long endTime = parseDate("29.2.2016");
 		CalendarMarkings result = (CalendarMarkings) XmlBindingTools.getInstance().unMarshall("<calendar_markings>" +
 				"  <calendar_marking name='bla2' color='#ff69b5' start_date='"+startTime + "' end_date='"+endTime + "' " +
 				"repeat_type='yearly_every_nth_day' repeat_each_n_occurence='30' first_occurence='30'/>" +
@@ -165,7 +172,7 @@ public class CalendarMarkingTests extends FreeMindTestBase {
 		assertNotNull(ev.isMarked(cal));
 		cal.add(Calendar.DAY_OF_YEAR, 30*11);
 		assertNull(ev.isMarked(cal));
-		long nextYearDate = DateFormat.getDateInstance().parse("30.1.2016").getTime();
+		long nextYearDate = parseDate("30.1.2016");
 		cal.setTimeInMillis(nextYearDate);
 		assertNotNull(ev.isMarked(cal));
 		cal.setTimeInMillis(endTime);
@@ -179,8 +186,8 @@ public class CalendarMarkingTests extends FreeMindTestBase {
 	 * @throws Exception
 	 */
 	public void testCalendarMarkingRepeatYearlyEveryNthDayStartAfterFirstOccurrence() throws Exception {
-		long startTime = DateFormat.getDateInstance().parse("27.10.2015").getTime();
-		long endTime = DateFormat.getDateInstance().parse("29.2.2016").getTime();
+		long startTime = parseDate("27.10.2015");
+		long endTime = parseDate("29.2.2016");
 		CalendarMarkings result = (CalendarMarkings) XmlBindingTools.getInstance().unMarshall("<calendar_markings>" +
 				"  <calendar_marking name='bla2' color='#ff69b5' start_date='"+startTime + "' end_date='"+endTime + "' " +
 				"repeat_type='yearly_every_nth_day' repeat_each_n_occurence='30' first_occurence='30'/>" +
@@ -189,15 +196,15 @@ public class CalendarMarkingTests extends FreeMindTestBase {
 		CalendarMarkingEvaluator ev = new CalendarMarkingEvaluator(result);
 //		ev.print();
 		Calendar cal = Calendar.getInstance();
-		long nextYearDate = DateFormat.getDateInstance().parse("30.1.2015").getTime();
+		long nextYearDate = parseDate("30.1.2015");
 		cal.setTimeInMillis(nextYearDate);
 		assertNull(ev.isMarked(cal));
 		cal.add(Calendar.DAY_OF_YEAR, 30);
 		assertNull(ev.isMarked(cal));
 	}
 	public void testCalendarMarkingRepeatWeeklyEveryNthDay() throws Exception {
-		long startTime = DateFormat.getDateInstance().parse("1.1.2015").getTime();
-		long endTime = DateFormat.getDateInstance().parse("1.3.2015").getTime();
+		long startTime = parseDate("1.1.2015");
+		long endTime = parseDate("1.3.2015");
 		CalendarMarkings result = (CalendarMarkings) XmlBindingTools.getInstance().unMarshall("<calendar_markings>" +
 				"  <calendar_marking name='bla2' color='#ff69b5' start_date='"+startTime + "' end_date='"+endTime + "' " +
 				"repeat_type='weekly_every_nth_day' repeat_each_n_occurence='2' first_occurence='5'/>" +
@@ -206,16 +213,16 @@ public class CalendarMarkingTests extends FreeMindTestBase {
 		CalendarMarkingEvaluator ev = new CalendarMarkingEvaluator(result);
 //		ev.print();
 		Calendar cal = Calendar.getInstance();
-		cal.setTimeInMillis(DateFormat.getDateInstance().parse("3.1.2015").getTime());
+		cal.setTimeInMillis(parseDate("3.1.2015"));
 		assertNotNull(ev.isMarked(cal));
-		cal.setTimeInMillis(DateFormat.getDateInstance().parse("8.1.2015").getTime());
+		cal.setTimeInMillis(parseDate("8.1.2015"));
 		assertNotNull(ev.isMarked(cal));
-		cal.setTimeInMillis(DateFormat.getDateInstance().parse("9.1.2015").getTime());
+		cal.setTimeInMillis(parseDate("9.1.2015"));
 		assertNull(ev.isMarked(cal));
 	}
 	public void testCalendarMarkingRepeatYearlyEveryNthWeek() throws Exception {
-		long startTime = DateFormat.getDateInstance().parse("9.1.2015").getTime();
-		long endTime = DateFormat.getDateInstance().parse("13.2.2016").getTime();
+		long startTime = parseDate("9.1.2015");
+		long endTime = parseDate("13.2.2016");
 		String inputString = "<calendar_markings>" +
 				"  <calendar_marking name='bla2' color='#ff69b5' start_date='"+startTime + "' end_date='"+endTime + "' " +
 				"repeat_type='yearly_every_nth_week' repeat_each_n_occurence='2' first_occurence='2'/>" +
@@ -226,12 +233,12 @@ public class CalendarMarkingTests extends FreeMindTestBase {
 		CalendarMarkingEvaluator ev = new CalendarMarkingEvaluator(result);
 		ev.print();
 		Calendar cal = Calendar.getInstance();
-		cal.setTimeInMillis(DateFormat.getDateInstance().parse("5.2.2016").getTime());
+		cal.setTimeInMillis(parseDate("5.2.2016"));
 		assertNull(ev.isMarked(cal));
 	}
 	public void testCalendarMarkingRepeatYearlyEveryNthWeekStrangeDates() throws Exception {
-		long startTime = DateFormat.getDateInstance().parse("9.1.2015").getTime();
-		long endTime = DateFormat.getDateInstance().parse("9.1.2016").getTime();
+		long startTime = parseDate("9.1.2015");
+		long endTime = parseDate("9.1.2016");
 		String inputString = "<calendar_markings>" +
 				"  <calendar_marking name='bla2' color='#ff69b5' start_date='"+startTime + "' end_date='"+endTime + "' " +
 				"repeat_type='yearly_every_nth_week' repeat_each_n_occurence='1' first_occurence='0'/>" +

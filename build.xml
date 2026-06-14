@@ -514,6 +514,7 @@
 				<include name="images/icons/*.png"/>
 				<include name="images/icons/*.svg"/>
 				<include name="*.properties"/>
+				<include name="FlatLaf.properties"/>
 				<exclude name="Resources_*.properties"/>
 				<!--				<include name="*.xml"/>
 				<exclude name="build.xml"/> -->
@@ -851,6 +852,7 @@
 			<fileset dir="${src}">
 				<include name="images/**"/>
 				<include name="freemind.properties"/>
+				<include name="FlatLaf.properties"/>
 				<include name="version.properties"/>
 				<include name="patterns.xml"/>
 				<include name="patterns_updater.xslt"/>

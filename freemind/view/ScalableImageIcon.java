@@ -67,6 +67,9 @@ public class ScalableImageIcon extends ImageIcon {
 		}
 
 		Image image = super.getImage();
+		if (image == null) {
+			return;
+		}
 		int width = image.getWidth(observer);
 		int height = image.getHeight(observer);
 		final Graphics2D g2d = (Graphics2D) g.create(x, y,
@@ -83,12 +86,19 @@ public class ScalableImageIcon extends ImageIcon {
 		if(mScaledImage !=  null){
 			return mScaledImage;
 		}
-		mScaledImage = super.getImage().getScaledInstance(getIconWidth(), getIconHeight(),  java.awt.Image.SCALE_SMOOTH); 
+		Image image = super.getImage();
+		if (image == null) {
+			return null;
+		}
+		mScaledImage = image.getScaledInstance(getIconWidth(), getIconHeight(),  java.awt.Image.SCALE_SMOOTH); 
 		return mScaledImage;
 	}
 
 	public ImageIcon getUnscaledIcon() {
 		Image image = super.getImage();
+		if (image == null) {
+			return this;
+		}
 		return new ImageIcon(image);
 	}
 }
