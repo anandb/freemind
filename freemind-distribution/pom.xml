@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>freemind</groupId>
+        <artifactId>freemind-parent</artifactId>
+        <version>1.1.0-beta-2</version>
+    </parent>
+
+    <artifactId>freemind-distribution</artifactId>
+    <packaging>pom</packaging>
+    <name>FreeMind Distribution</name>
+    <description>Uberjar assembly for FreeMind</description>
+
+    <dependencies>
+        <!-- Core -->
+        <dependency>
+            <groupId>freemind</groupId>
+            <artifactId>freemind-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- Plugins -->
+        <dependency>
+            <groupId>freemind</groupId>
+            <artifactId>freemind-plugins</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Call Ant uberjar target -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>uberjar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <ant antfile="${project.basedir}/../build.xml" target="uberjar" dir="${project.basedir}/.."/>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

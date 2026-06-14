@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>freemind</groupId>
+    <artifactId>freemind-parent</artifactId>
+    <version>1.1.0-beta-2</version>
+    <packaging>pom</packaging>
+    <name>FreeMind</name>
+    <description>Mind mapping application</description>
+
+    <modules>
+        <module>freemind-core</module>
+        <module>freemind-plugins</module>
+        <module>freemind-distribution</module>
+    </modules>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.release>17</maven.compiler.release>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+
+        <!-- Dependency versions -->
+        <jgoodies-forms.version>1.8.0</jgoodies-forms.version>
+        <jgoodies-common.version>1.8.1</jgoodies-common.version>
+        <jsoup.version>1.10.3</jsoup.version>
+        <jibx.version>1.4.2</jibx.version>
+        <xalan.version>2.7.2</xalan.version>
+        <xerces.version>2.9.0</xerces.version>
+        <xml-apis.version>1.4.01</xml-apis.version>
+        <batik.version>1.7</batik.version>
+        <groovy.version>2.1.8</groovy.version>
+        <lucene.version>4.6.0</lucene.version>
+        <hsqldb.version>2.3.2</hsqldb.version>
+        <junit.version>4.13.2</junit.version>
+        <bcel.version>6.7.0</bcel.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- JGoodies -->
+            <dependency>
+                <groupId>com.jgoodies</groupId>
+                <artifactId>jgoodies-forms</artifactId>
+                <version>${jgoodies-forms.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jgoodies</groupId>
+                <artifactId>jgoodies-common</artifactId>
+                <version>${jgoodies-common.version}</version>
+            </dependency>
+
+            <!-- jsoup -->
+            <dependency>
+                <groupId>org.jsoup</groupId>
+                <artifactId>jsoup</artifactId>
+                <version>${jsoup.version}</version>
+            </dependency>
+
+            <!-- JiBX -->
+            <dependency>
+                <groupId>org.jibx</groupId>
+                <artifactId>jibx-run</artifactId>
+                <version>${jibx.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jibx</groupId>
+                <artifactId>jibx-bind</artifactId>
+                <version>${jibx.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jibx</groupId>
+                <artifactId>jibx-extras</artifactId>
+                <version>${jibx.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>xpp3</groupId>
+                <artifactId>xpp3</artifactId>
+                <version>1.1.4c</version>
+            </dependency>
+
+            <!-- Xalan -->
+            <dependency>
+                <groupId>xalan</groupId>
+                <artifactId>xalan</artifactId>
+                <version>${xalan.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>xalan</groupId>
+                <artifactId>serializer</artifactId>
+                <version>${xalan.version}</version>
+            </dependency>
+
+            <!-- Xerces -->
+            <dependency>
+                <groupId>xerces</groupId>
+                <artifactId>xercesImpl</artifactId>
+                <version>${xerces.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>xml-apis</groupId>
+                <artifactId>xml-apis</artifactId>
+                <version>${xml-apis.version}</version>
+            </dependency>
+
+            <!-- Apache Batik (org.apache.xmlgraphics group for 1.7) -->
+            <dependency>
+                <groupId>org.apache.xmlgraphics</groupId>
+                <artifactId>batik-anim</artifactId>
+                <version>${batik.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.xmlgraphics</groupId>
+                <artifactId>batik-awt-util</artifactId>
+                <version>${batik.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.xmlgraphics</groupId>
+                <artifactId>batik-bridge</artifactId>
+                <version>${batik.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.xmlgraphics</groupId>
+                <artifactId>batik-codec</artifactId>
+                <version>${batik.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.xmlgraphics</groupId>
+                <artifactId>batik-css</artifactId>
+                <version>${batik.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.xmlgraphics</groupId>
+                <artifactId>batik-dom</artifactId>
+                <version>${batik.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.xmlgraphics</groupId>
+                <artifactId>batik-ext</artifactId>
+                <version>${batik.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.xmlgraphics</groupId>
+                <artifactId>batik-extension</artifactId>
+                <version>${batik.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.xmlgraphics</groupId>
+                <artifactId>batik-gvt</artifactId>
+                <version>${batik.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.xmlgraphics</groupId>
+                <artifactId>batik-parser</artifactId>
+                <version>${batik.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.xmlgraphics</groupId>
+                <artifactId>batik-script</artifactId>
+                <version>${batik.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.xmlgraphics</groupId>
+                <artifactId>batik-svg-dom</artifactId>
+                <version>${batik.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.xmlgraphics</groupId>
+                <artifactId>batik-svggen</artifactId>
+                <version>${batik.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.xmlgraphics</groupId>
+                <artifactId>batik-transcoder</artifactId>
+                <version>${batik.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.xmlgraphics</groupId>
+                <artifactId>batik-util</artifactId>
+                <version>${batik.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.xmlgraphics</groupId>
+                <artifactId>batik-xml</artifactId>
+                <version>${batik.version}</version>
+            </dependency>
+
+            <!-- Groovy -->
+            <dependency>
+                <groupId>org.codehaus.groovy</groupId>
+                <artifactId>groovy-all</artifactId>
+                <version>${groovy.version}</version>
+                <type>pom</type>
+            </dependency>
+
+            <!-- Lucene -->
+            <dependency>
+                <groupId>org.apache.lucene</groupId>
+                <artifactId>lucene-core</artifactId>
+                <version>${lucene.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.lucene</groupId>
+                <artifactId>lucene-analyzers-common</artifactId>
+                <version>${lucene.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.lucene</groupId>
+                <artifactId>lucene-queryparser</artifactId>
+                <version>${lucene.version}</version>
+            </dependency>
+
+            <!-- HSQLDB -->
+            <dependency>
+                <groupId>org.hsqldb</groupId>
+                <artifactId>hsqldb</artifactId>
+                <version>${hsqldb.version}</version>
+            </dependency>
+
+            <!-- Apache BCEL -->
+            <dependency>
+                <groupId>org.apache.bcel</groupId>
+                <artifactId>bcel</artifactId>
+                <version>${bcel.version}</version>
+            </dependency>
+
+            <!-- JUnit -->
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <!-- Install vendored JARs to local repo before build -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>3.1.1</version>
+                <inherited>false</inherited>
+                <executions>
+                    <execution>
+                        <id>install-bindings</id>
+                        <phase>initialize</phase>
+                        <goals><goal>install-file</goal></goals>
+                        <configuration>
+                            <groupId>freemind</groupId>
+                            <artifactId>bindings</artifactId>
+                            <version>1.0</version>
+                            <packaging>jar</packaging>
+                            <file>${project.basedir}/lib/bindings.jar</file>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>install-jortho</id>
+                        <phase>initialize</phase>
+                        <goals><goal>install-file</goal></goals>
+                        <configuration>
+                            <groupId>freemind</groupId>
+                            <artifactId>jortho</artifactId>
+                            <version>1.0</version>
+                            <packaging>jar</packaging>
+                            <file>${project.basedir}/lib/jortho.jar</file>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>install-jhall</id>
+                        <phase>initialize</phase>
+                        <goals><goal>install-file</goal></goals>
+                        <configuration>
+                            <groupId>freemind</groupId>
+                            <artifactId>jhall</artifactId>
+                            <version>1.0</version>
+                            <packaging>jar</packaging>
+                            <file>${project.basedir}/plugins/help/jhall.jar</file>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>install-jmapviewer</id>
+                        <phase>initialize</phase>
+                        <goals><goal>install-file</goal></goals>
+                        <configuration>
+                            <groupId>freemind</groupId>
+                            <artifactId>JMapViewer</artifactId>
+                            <version>1.0</version>
+                            <packaging>jar</packaging>
+                            <file>${project.basedir}/plugins/map/JMapViewer.jar</file>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>install-pdf-transcoder</id>
+                        <phase>initialize</phase>
+                        <goals><goal>install-file</goal></goals>
+                        <configuration>
+                            <groupId>freemind</groupId>
+                            <artifactId>pdf-transcoder</artifactId>
+                            <version>1.0</version>
+                            <packaging>jar</packaging>
+                            <file>${project.basedir}/plugins/svg/pdf-transcoder.jar</file>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.12.1</version>
+                    <configuration>
+                        <release>17</release>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>3.3.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>3.3.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>3.2.5</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>build-helper-maven-plugin</artifactId>
+                    <version>3.5.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>3.1.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-shade-plugin</artifactId>
+                    <version>3.5.1</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>

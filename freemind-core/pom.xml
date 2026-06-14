@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>freemind</groupId>
+        <artifactId>freemind-parent</artifactId>
+        <version>1.1.0-beta-2</version>
+    </parent>
+
+    <artifactId>freemind-core</artifactId>
+    <name>FreeMind Core</name>
+    <description>Main FreeMind application with built-in plugins</description>
+
+    <dependencies>
+        <!-- JGoodies -->
+        <dependency>
+            <groupId>com.jgoodies</groupId>
+            <artifactId>jgoodies-forms</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jgoodies</groupId>
+            <artifactId>jgoodies-common</artifactId>
+        </dependency>
+
+        <!-- jsoup -->
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+        </dependency>
+
+        <!-- JiBX Runtime -->
+        <dependency>
+            <groupId>org.jibx</groupId>
+            <artifactId>jibx-run</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>xpp3</groupId>
+            <artifactId>xpp3</artifactId>
+        </dependency>
+        <!-- Generated JiBX bindings -->
+        <dependency>
+            <groupId>freemind</groupId>
+            <artifactId>bindings</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <!-- Apache Batik -->
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-anim</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-awt-util</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-bridge</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-codec</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-css</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-dom</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-ext</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-extension</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-gvt</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-parser</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-script</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-svg-dom</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-svggen</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-transcoder</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-util</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-xml</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>xml-apis</groupId>
+            <artifactId>xml-apis-ext</artifactId>
+            <version>1.3.04</version>
+        </dependency>
+
+        <!-- Xalan -->
+        <dependency>
+            <groupId>xalan</groupId>
+            <artifactId>xalan</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>xalan</groupId>
+            <artifactId>serializer</artifactId>
+        </dependency>
+
+        <!-- Xerces -->
+        <dependency>
+            <groupId>xerces</groupId>
+            <artifactId>xercesImpl</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>xml-apis</groupId>
+            <artifactId>xml-apis</artifactId>
+        </dependency>
+
+        <!-- System-scope dependencies (vendored JARs) -->
+        <dependency>
+            <groupId>freemind</groupId>
+            <artifactId>jortho</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.formdev</groupId>
+            <artifactId>flatlaf</artifactId>
+            <version>3.5.4</version>
+        </dependency>
+
+        <!-- Test -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <!-- No default sourceDirectory - we add them via build-helper -->
+        <sourceDirectory>.</sourceDirectory>
+
+        <resources>
+            <!-- Root-level resources -->
+            <resource>
+                <directory>${project.basedir}/..</directory>
+                <includes>
+                    <include>freemind.properties</include>
+                    <include>version.properties</include>
+                    <include>patterns.xml</include>
+                    <include>patterns_updater.xslt</include>
+                    <include>mindmap_menus.xml</include>
+                    <include>Resources*.properties</include>
+                    <include>dictionar*</include>
+                    <include>freemind.xsd</include>
+                    <include>freemind_actions.xsd</include>
+                </includes>
+                <excludes>
+                    <exclude>Resources_*.properties</exclude>
+                </excludes>
+            </resource>
+            <!-- Images -->
+            <resource>
+                <directory>${project.basedir}/../images</directory>
+                <targetPath>images</targetPath>
+                <includes>
+                    <include>**/*.png</include>
+                    <include>**/*.svg</include>
+                    <include>**/*.icns</include>
+                    <include>**/*.jpg</include>
+                </includes>
+            </resource>
+            <!-- Icons subdirectory -->
+            <resource>
+                <directory>${project.basedir}/../images/icons</directory>
+                <targetPath>images/icons</targetPath>
+                <includes>
+                    <include>**/*.png</include>
+                    <include>**/*.svg</include>
+                </includes>
+            </resource>
+            <!-- XSLT in subdirectories -->
+            <resource>
+                <directory>${project.basedir}/..</directory>
+                <includes>
+                    <include>**/freemind_version_updater.xslt</include>
+                </includes>
+            </resource>
+            <!-- Accessories resources (XSL, CSS, JS, XML, images) -->
+            <resource>
+                <directory>${project.basedir}/../accessories</directory>
+                <targetPath>accessories</targetPath>
+                <excludes>
+                    <exclude>plugins/**</exclude>
+                </excludes>
+            </resource>
+            <!-- Accessory plugin XML descriptors -->
+            <resource>
+                <directory>${project.basedir}/../accessories/plugins</directory>
+                <targetPath>accessories/plugins</targetPath>
+                <includes>
+                    <include>*.xml</include>
+                </includes>
+            </resource>
+        </resources>
+
+        <testResources>
+            <testResource>
+                <directory>${project.basedir}/..</directory>
+                <includes>
+                    <include>freemind.properties</include>
+                </includes>
+            </testResource>
+        </testResources>
+
+        <plugins>
+            <!-- Add additional source directories -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>add-source</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${project.basedir}/../freemind</source>
+                                <source>${project.basedir}/../accessories/plugins</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- JiBX Code Generation (uses pre-built bindings.jar) -->
+            <!-- To regenerate: run 'ant gen' from project root, then rebuild -->
+            <!-- The antrun plugin below can be re-enabled when ready to -->
+            <!-- fully replace the Ant codegen pipeline -->
+            <!--
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>jibx-codegen</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                ... codegen logic ...
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            -->
+
+            <!-- JAR plugin with manifest -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <finalName>freemind</finalName>
+                    <archive>
+                        <manifest>
+                            <mainClass>freemind.main.FreeMindStarter</mainClass>
+                        </manifest>
+                        <manifestEntries>
+                            <Built-By>${user.name}</Built-By>
+                            <Created-By>Joerg Mueller, Daniel Polansky, Christian Foltin, Dimitry Polivaev, and others.</Created-By>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+
+            <!-- Surefire for tests -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <includes>
+                        <include>**/AllTests.java</include>
+                    </includes>
+                    <argLine>-Djava.awt.headless=true</argLine>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

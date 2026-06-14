@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>freemind</groupId>
+        <artifactId>freemind-parent</artifactId>
+        <version>1.1.0-beta-2</version>
+    </parent>
+
+    <artifactId>freemind-plugins</artifactId>
+    <name>FreeMind Plugins</name>
+    <description>Active FreeMind plugins (svg, socket, help, map, script)</description>
+
+    <dependencies>
+        <!-- Core (for classpath) -->
+        <dependency>
+            <groupId>freemind</groupId>
+            <artifactId>freemind-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- SVG Plugin dependencies (Batik) -->
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-anim</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-awt-util</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-bridge</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-codec</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-css</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-dom</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-ext</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-extension</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-gvt</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-parser</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-script</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-svg-dom</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-svggen</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-transcoder</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-util</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-xml</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>xml-apis</groupId>
+            <artifactId>xml-apis</artifactId>
+        </dependency>
+
+        <!-- Help Plugin dependencies -->
+        <dependency>
+            <groupId>freemind</groupId>
+            <artifactId>jhall</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <!-- Map Plugin dependencies -->
+        <dependency>
+            <groupId>freemind</groupId>
+            <artifactId>JMapViewer</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <!-- Script Plugin dependencies -->
+        <dependency>
+            <groupId>org.apache.groovy</groupId>
+            <artifactId>groovy-all</artifactId>
+            <version>4.0.24</version>
+            <type>pom</type>
+        </dependency>
+
+        <!-- SVG Plugin system-scope dependencies -->
+        <dependency>
+            <groupId>freemind</groupId>
+            <artifactId>pdf-transcoder</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mozilla</groupId>
+            <artifactId>rhino</artifactId>
+            <version>1.7R3</version>
+        </dependency>
+        <dependency>
+            <groupId>xerces</groupId>
+            <artifactId>xercesImpl</artifactId>
+            <version>2.5.0</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+
+        <plugins>
+            <!-- Add all plugin source directories -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>add-plugin-sources</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${project.basedir}/../plugins/svg</source>
+                                <source>${project.basedir}/../plugins/collaboration/socket</source>
+                                <source>${project.basedir}/../plugins/help</source>
+                                <source>${project.basedir}/../plugins/map</source>
+                                <source>${project.basedir}/../plugins/script</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Resources: plugin XML descriptors -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-plugin-xml</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.outputDirectory}</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.basedir}/..</directory>
+                                    <includes>
+                                        <include>plugins/ExportSvg.xml</include>
+                                        <include>plugins/CollaborationSocket.xml</include>
+                                        <include>plugins/FreemindHelp.xml</include>
+                                        <include>plugins/MapViewer.xml</include>
+                                        <include>plugins/ScriptingEngine.xml</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Plugin JAR: single jar with all plugin classes -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <includes>
+                        <include>plugins/**</include>
+                    </includes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
