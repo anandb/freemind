@@ -149,7 +149,7 @@ public class MindMapToolBar extends FreeMindToolBar implements ZoomListener {
 		userDefinedZoom = controller.getText("user_defined_zoom");
 
 		zoom = new FreeMindComboBox(controller.getController().getZooms());
-		zoom.setSelectedItem("100%");
+		zoom.setSelectedItem("150%");
 		zoom.addItem(userDefinedZoom);
 		// Focus fix.
 		zoom.setFocusable(false);
