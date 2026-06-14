@@ -33,7 +33,7 @@ public class StrikethroughAction extends NodeGeneralAction implements
 	/**
 	 */
 	public StrikethroughAction(MindMapController modeController) {
-		super(modeController, "Strikethrough", "images/format-text-strikethrough.png");
+		super(modeController, "Strikethrough", "images/format-text-strikethrough.svg");
 		setDoActionClass(StrikethroughNodeAction.class);
 	}
 	public boolean isSelected(JMenuItem item, Action action) {

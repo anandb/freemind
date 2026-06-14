@@ -44,7 +44,7 @@ public class RemoveArrowLinkAction extends MindmapAction {
 	 */
 	public RemoveArrowLinkAction(MindMapController controller,
 			MindMapArrowLinkModel arrowLink) {
-		super("remove_arrow_link", "images/edittrash.png", controller);
+		super("remove_arrow_link", "images/edittrash.svg", controller);
 		this.controller = controller;
 		setArrowLink(arrowLink);
 	}

@@ -1100,7 +1100,7 @@ public class Controller implements MapModuleChangeObserver {
 		PrintAction(Controller controller, boolean isDlg) {
 			super(isDlg ? controller.getResourceString("print_dialog")
 					: controller.getResourceString("print"), freemind.view.ImageFactory.getInstance().createIcon(
-					getResource("images/fileprint.png")));
+					getResource("images/fileprint.svg")));
 			setEnabled(false);
 			this.isDlg = isDlg;
 		}
@@ -1371,7 +1371,7 @@ public class Controller implements MapModuleChangeObserver {
 	private class NavigationPreviousMapAction extends AbstractAction {
 		NavigationPreviousMapAction(Controller controller) {
 			super(controller.getResourceString("previous_map"), freemind.view.ImageFactory.getInstance().createIcon(
-					getResource("images/1leftarrow.png")));
+					getResource("images/1leftarrow.svg")));
 			setEnabled(false);
 		}
 
@@ -1383,7 +1383,7 @@ public class Controller implements MapModuleChangeObserver {
 	private class ShowFilterToolbarAction extends AbstractAction {
 		ShowFilterToolbarAction(Controller controller) {
 			super(getResourceString("filter_toolbar"), freemind.view.ImageFactory.getInstance().createIcon(
-					getResource("images/filter.gif")));
+					getResource("images/filter.svg")));
 		}
 
 		public void actionPerformed(ActionEvent event) {
@@ -1398,7 +1398,7 @@ public class Controller implements MapModuleChangeObserver {
 	private class NavigationNextMapAction extends AbstractAction {
 		NavigationNextMapAction(Controller controller) {
 			super(controller.getResourceString("next_map"), freemind.view.ImageFactory.getInstance().createIcon(
-					getResource("images/1rightarrow.png")));
+					getResource("images/1rightarrow.svg")));
 			setEnabled(false);
 		}
 

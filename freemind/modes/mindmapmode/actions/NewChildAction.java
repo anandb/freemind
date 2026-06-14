@@ -38,7 +38,7 @@ public class NewChildAction extends MindmapAction  {
 	private static Logger logger = null;
 
 	public NewChildAction(MindMapController modeController) {
-		super("new_child", "images/idea.png", modeController);
+		super("new_child", "images/idea.svg", modeController);
 		this.c = modeController;
 		if (logger == null) {
 			logger = c.getFrame().getLogger(NewChildAction.class.getName());

@@ -51,7 +51,7 @@ public class UndoAction extends AbstractXmlAction {
 
 	public UndoAction(MindMapController controller) {
 		this(controller, controller.getText("undo"), freemind.view.ImageFactory.getInstance().createIcon(
-				controller.getResource("images/undo.png")), controller);
+				controller.getResource("images/undo.svg")), controller);
 		this.controller = controller;
 		if (logger == null) {
 			logger = controller.getFrame()

@@ -209,7 +209,7 @@ public class MindMapToolBar extends FreeMindToolBar implements ZoomListener {
 		this.removeAll();
 		holder.updateMenus(this, "mindmapmode_toolbar/");
 		
-		addIcon("images/list-add-font.png");
+		addIcon("images/list-add-font.svg");
 		fonts.setMaximumRowCount(30);
 		add(fonts);
 
@@ -221,7 +221,7 @@ public class MindMapToolBar extends FreeMindToolBar implements ZoomListener {
 		label.setToolTipText(Resources.getInstance().getText("mindmapmode_toolbar_font_color"));
 		add(colorCombo);
 		add(Box.createHorizontalGlue());
-		addIcon("images/page-zoom.png");
+		addIcon("images/page-zoom.svg");
 		add(zoom);
 		
 		// button tool bar.

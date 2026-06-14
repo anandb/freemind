@@ -95,7 +95,7 @@ public class FindAction extends FreemindAction {
 	private String mLastSearchString;
 
 	public FindAction(ControllerAdapter controller) {
-		super("find", "images/filefind.png", controller);
+		super("find", "images/filefind.svg", controller);
 		this.controller = controller;
 	}
 
@@ -176,7 +176,7 @@ public class FindAction extends FreemindAction {
 				1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH,
 				new Insets(5, 5, 0, 0), 0, 0));
 		ImageIcon findImage = freemind.view.ImageFactory.getInstance().createIcon(Resources.getInstance()
-				.getResource("images/filefind_big.png"));
+				.getResource("images/filefind_big.svg"));
 		contentPane.add(new JLabel(findImage), new GridBagConstraints(0, 0, 1,
 				2, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH,
 				new Insets(5, 5, 0, 0), 0, 0));

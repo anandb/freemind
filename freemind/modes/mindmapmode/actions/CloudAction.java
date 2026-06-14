@@ -38,7 +38,7 @@ import freemind.modes.mindmapmode.MindMapController;
 public class CloudAction extends NodeGeneralAction implements MenuItemSelectedListener {
 
 	public CloudAction(MindMapController controller) {
-		super(controller, "cloud", "images/Cloud24.gif");
+		super(controller, "cloud", "images/Cloud.svg");
 		setDoActionClass(getDoActionClass());
 	}
 

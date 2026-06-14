@@ -38,7 +38,7 @@ public class ItalicAction extends NodeGeneralAction implements
 	/**
 	 */
 	public ItalicAction(MindMapController modeController) {
-		super(modeController, "italic", "images/Italic16.gif");
+		super(modeController, "italic", "images/Italic.svg");
 		this.modeController = modeController;
 		setDoActionClass(ItalicNodeAction.class);
 	}

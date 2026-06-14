@@ -38,7 +38,7 @@ public class UnderlinedAction extends NodeGeneralAction implements
 	/**
 	 */
 	public UnderlinedAction(MindMapController modeController) {
-		super(modeController, "underlined", "images/Underline24.gif");
+		super(modeController, "underlined", "images/Underline.svg");
 		this.modeController = modeController;
 		setDoActionClass(UnderlinedNodeAction.class);
 	}

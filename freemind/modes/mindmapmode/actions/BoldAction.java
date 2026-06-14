@@ -38,7 +38,7 @@ public class BoldAction extends NodeGeneralAction implements
 	/**
 	 */
 	public BoldAction(MindMapController modeController) {
-		super(modeController, "bold", "images/Bold16.gif");
+		super(modeController, "bold", "images/Bold.svg");
 		setDoActionClass(BoldNodeAction.class);
 	}
 	public boolean isSelected(JMenuItem item, Action action) {

@@ -32,7 +32,7 @@ public class RedoAction extends UndoAction {
 
 	public RedoAction(MindMapController controller) {
 		super(controller, controller.getText("redo"), freemind.view.ImageFactory.getInstance().createIcon(
-				controller.getResource("images/redo.png")), controller);
+				controller.getResource("images/redo.svg")), controller);
 		this.controller = controller;
 	}
 

@@ -41,7 +41,7 @@ public class NewMapAction extends AbstractAction {
 
 	public NewMapAction(ModeController modeController) {
 		super(modeController.getText("new"), freemind.view.ImageFactory.getInstance().createIcon(
-				modeController.getResource("images/filenew.png")));
+				modeController.getResource("images/filenew.svg")));
 		this.modeController = modeController;
 		// Workaround to get the images loaded in jar file.
 		// they have to be added to jar manually with full path from root

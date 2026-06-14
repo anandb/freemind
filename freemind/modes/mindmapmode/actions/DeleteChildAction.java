@@ -37,7 +37,7 @@ public class DeleteChildAction extends MindmapAction  {
 	private final MindMapController mMindMapController;
 
 	public DeleteChildAction(MindMapController modeController) {
-		super("remove_node", "images/editdelete.png", modeController);
+		super("remove_node", "images/editdelete.svg", modeController);
 		this.mMindMapController = modeController;
 	}
 
