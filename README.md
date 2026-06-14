@@ -55,3 +55,7 @@ freemind-code/
 ## License
 
 GNU General Public License v2. See [COPYING](COPYING) for details.
+
+## Support the Author
+
+Support the Author of this project by signing up for [OpenCode Go](https://opencode.ai/go?ref=DWTNHGN9KX) 🚀
