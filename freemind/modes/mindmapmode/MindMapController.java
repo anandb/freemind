@@ -580,6 +580,9 @@ public class MindMapController extends ControllerAdapter implements
 				removeLastIconAction);
 		removeLastIconAction.setIconAction(unknownIconAction);
 		removeAllIconsAction = new RemoveAllIconsAction(this, unknownIconAction);
+		// Set accelerators so menu items and global key bindings work
+		removeLastIconAction.putValue(Action.ACCELERATOR_KEY, removeLastIconAction.getKeyStroke());
+		removeAllIconsAction.putValue(Action.ACCELERATOR_KEY, removeAllIconsAction.getKeyStroke());
 		// load pattern actions:
 		loadPatternActions();
 		EdgeWidth_WIDTH_PARENT = new EdgeWidthAction(this,
@@ -1270,6 +1273,20 @@ public class MindMapController extends ControllerAdapter implements
 
 	public Component getLeftToolBar() {
 		return toolbar.getLeftToolBar();
+	}
+
+	public void filterIcons(String searchText) {
+		toolbar.filterIcons(searchText);
+	}
+
+	public void focusFirstVisibleIcon() {
+		toolbar.focusFirstVisibleIcon();
+	}
+
+	public void focusMapView() {
+		if (getController().getView() != null) {
+			getController().getView().requestFocusInWindow();
+		}
 	}
 
 	/**

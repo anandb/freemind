@@ -20,16 +20,20 @@
 
 package freemind.modes.mindmapmode;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
 
+import javax.swing.AbstractButton;
 import javax.swing.Action;
 import javax.swing.Box;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JToolBar;
 
 import freemind.controller.Controller;
@@ -69,6 +73,7 @@ public class MindMapToolBar extends FreeMindToolBar implements ZoomListener {
 	private JComboBox<String> fonts, size;
 	private JAutoScrollBarPane iconToolBarScrollPane;
 	private JToolBar iconToolBar;
+	private JToolBar removeToolBar;
 	private boolean fontSize_IgnoreChangeEvent = false;
 	private boolean fontFamily_IgnoreChangeEvent = false;
 	private boolean color_IgnoreChangeEvent = false;
@@ -95,6 +100,9 @@ public class MindMapToolBar extends FreeMindToolBar implements ZoomListener {
 		size.setFocusable(false);
 		iconToolBar = new FreeMindToolBar();
 		iconToolBarScrollPane = new JAutoScrollBarPane(iconToolBar);
+		removeToolBar = new FreeMindToolBar();
+		removeToolBar.setFloatable(false);
+		removeToolBar.setBorderPainted(false);
 		String iconBarPosition = getController().getProperty(FreeMind.ICON_BAR_POSITION);
 		if ("top".equals(iconBarPosition)) {
 			iconToolBar.setOrientation(JToolBar.HORIZONTAL);
@@ -107,6 +115,25 @@ public class MindMapToolBar extends FreeMindToolBar implements ZoomListener {
 			iconToolBar.setLayout(new GridLayout(0, cols));
 			iconToolBarScrollPane.getVerticalScrollBar().setUnitIncrement(100);
 		}
+		// Return focus to map after ENTER on icon button. Button handles ENTER
+		// internally; we just observe and return focus afterward.
+		java.awt.KeyboardFocusManager.getCurrentKeyboardFocusManager()
+				.addKeyEventDispatcher(new java.awt.KeyEventDispatcher() {
+					public boolean dispatchKeyEvent(KeyEvent e) {
+						if (e.getID() == KeyEvent.KEY_PRESSED
+								&& e.getKeyCode() == KeyEvent.VK_ENTER) {
+							java.awt.Component focusOwner = java.awt.KeyboardFocusManager
+									.getCurrentKeyboardFocusManager().getFocusOwner();
+							if (focusOwner != null
+									&& javax.swing.SwingUtilities.isDescendingFrom(
+											focusOwner, iconToolBar)) {
+								javax.swing.SwingUtilities.invokeLater(() -> c
+										.focusMapView());
+							}
+						}
+						return false;
+					}
+				});
 		fontsListener = new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				if (e.getStateChange() != ItemEvent.SELECTED) {
@@ -224,14 +251,23 @@ public class MindMapToolBar extends FreeMindToolBar implements ZoomListener {
 		addIcon("images/page-zoom.svg");
 		add(zoom);
 		
-		// button tool bar.
+		// remove tool bar (always visible, outside scroll pane)
+		removeToolBar.removeAll();
+		removeToolBar.add(c.removeLastIconAction);
+		removeToolBar.add(c.removeAllIconsAction);
+		removeToolBar.addSeparator();
+		removeToolBar.revalidate();
+		// icon tool bar (inside scroll pane, filterable)
 		iconToolBar.removeAll();
-		iconToolBar.add(c.removeLastIconAction);
-		iconToolBar.add(c.removeAllIconsAction);
-		iconToolBar.addSeparator();
 		for (int i = 0; i < c.iconActions.size(); ++i) {
 			iconToolBar.add((Action) c.iconActions.get(i));
 		}
+		// Make icon buttons focusable (FreeMindToolBar.add() sets non-focusable)
+		for (int i = 0; i < iconToolBar.getComponentCount(); i++) {
+			iconToolBar.getComponent(i).setFocusable(true);
+		}
+		iconToolBar.revalidate();
+		iconToolBarScrollPane.revalidate();
 	}
 
 	public JLabel addIcon(String iconPath) {
@@ -257,7 +293,10 @@ public class MindMapToolBar extends FreeMindToolBar implements ZoomListener {
 	}
 
 	Component getLeftToolBar() {
-		return iconToolBarScrollPane;
+		JPanel panel = new JPanel(new BorderLayout());
+		panel.add(removeToolBar, BorderLayout.NORTH);
+		panel.add(iconToolBarScrollPane, BorderLayout.CENTER);
+		return panel;
 	}
 
 	public void selectFontName(String fontName) // (DiPo)
@@ -304,6 +343,32 @@ public class MindMapToolBar extends FreeMindToolBar implements ZoomListener {
 		
 	public void shutdown() {
 		getController().deregisterZoomListener(this);
+	}
+
+	void filterIcons(String searchText) {
+		Component[] comps = iconToolBar.getComponents();
+		boolean emptySearch = (searchText == null || searchText.trim().isEmpty());
+		for (int i = 0; i < comps.length; i++) {
+			if (comps[i] instanceof AbstractButton) {
+				String desc = ((AbstractButton) comps[i]).getToolTipText();
+				boolean match = emptySearch
+						|| (desc != null && desc.toLowerCase().contains(searchText.toLowerCase()));
+				comps[i].setVisible(match);
+			}
+		}
+		iconToolBar.revalidate();
+		iconToolBarScrollPane.revalidate();
+		iconToolBar.repaint();
+	}
+
+	void focusFirstVisibleIcon() {
+		Component[] comps = iconToolBar.getComponents();
+		for (int i = 0; i < comps.length; i++) {
+			if (comps[i] instanceof AbstractButton && comps[i].isVisible()) {
+				comps[i].requestFocusInWindow();
+				return;
+			}
+		}
 	}
 
 	public void selectColor(Color pColor) {

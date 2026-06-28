@@ -43,7 +43,7 @@ public class RemoveIconAction extends NodeGeneralAction implements
 	/**
      */
 	public RemoveIconAction(MindMapController modeController) {
-		super(modeController, "remove_last_icon", "images/remove.svg");
+		super(modeController, "remove_last_icon", "images/icons8-subtract-48.png");
 		setDoActionClass(RemoveIconXmlAction.class);
 	}
 

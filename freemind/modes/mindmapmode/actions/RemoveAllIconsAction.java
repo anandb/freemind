@@ -44,7 +44,7 @@ public class RemoveAllIconsAction extends NodeGeneralAction implements
      */
 	public RemoveAllIconsAction(MindMapController modeController,
 			IconAction addIconAction) {
-		super(modeController, "remove_all_icons", "images/edittrash.svg");
+		super(modeController, "remove_all_icons", "images/icons8-recycle-bin-48.png");
 		setDoActionClass(RemoveAllIconsXmlAction.class);
 	}
 
