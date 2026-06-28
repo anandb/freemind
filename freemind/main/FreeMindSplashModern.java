@@ -133,7 +133,7 @@ public class FreeMindSplashModern extends JFrame implements IFreeMindSplash {
 		// License GPLV2+
 		ImageFactory imageFactory = ImageFactory.getInstance();
 		mIcon = imageFactory.createIcon(
-				frame.getResource("images/76812-freemind_v0.4.png"));
+				frame.getResource("images/freemind-icon.png"));
 		setIconImage(mIcon.getImage()); // Set the icon
 		setDefaultLookAndFeelDecorated(false);
 		setUndecorated(true);
