@@ -38,6 +38,7 @@ import javax.swing.JToolBar;
 
 import freemind.controller.Controller;
 import freemind.controller.FreeMindToolBar;
+import freemind.modes.mindmapmode.actions.IconAction;
 import freemind.controller.StructuredMenuHolder;
 import freemind.controller.ZoomListener;
 import freemind.controller.color.ColorPair;
@@ -347,12 +348,20 @@ public class MindMapToolBar extends FreeMindToolBar implements ZoomListener {
 
 	void filterIcons(String searchText) {
 		Component[] comps = iconToolBar.getComponents();
-		boolean emptySearch = (searchText == null || searchText.trim().isEmpty());
+		String lowerSearch = (searchText == null) ? "" : searchText.trim().toLowerCase();
+		boolean emptySearch = lowerSearch.isEmpty();
 		for (int i = 0; i < comps.length; i++) {
 			if (comps[i] instanceof AbstractButton) {
-				String desc = ((AbstractButton) comps[i]).getToolTipText();
+				AbstractButton btn = (AbstractButton) comps[i];
+				String desc = btn.getToolTipText();
+				// Also match against icon file name (e.g. "help", "hourglass")
+				String iconName = null;
+				if (btn.getAction() instanceof IconAction) {
+					iconName = ((IconAction) btn.getAction()).getMindIcon().getName();
+				}
 				boolean match = emptySearch
-						|| (desc != null && desc.toLowerCase().contains(searchText.toLowerCase()));
+						|| (desc != null && desc.toLowerCase().contains(lowerSearch))
+						|| (iconName != null && iconName.contains(lowerSearch));
 				comps[i].setVisible(match);
 			}
 		}
