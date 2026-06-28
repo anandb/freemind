@@ -50,6 +50,21 @@
                             </target>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>make-executable</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <exec executable="/bin/sh" dir="${project.basedir}/../target/dist">
+                                    <arg value="-c"/>
+                                    <arg value="printf '%s\n' '#!/bin/sh' 'exec java -jar &quot;$$0&quot; &quot;$$@&quot;' > freemind.footer &amp;&amp; cat freemind.footer freemind-all.jar > freemind &amp;&amp; chmod +x freemind &amp;&amp; rm freemind.footer"/>
+                                </exec>
+                            </target>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
         </plugins>
