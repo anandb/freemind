@@ -2,7 +2,7 @@
 
 Fork of [FreeMind](https://freemind.sourceforge.io) — a mind mapping application.
 
-FreePlane is a sophisticated successor, but lacks the simplicity of the original.
+[FreePlane](https://docs.freeplane.org) is a sophisticated successor, but lacks the simplicity of the original.
 
 ## What This Fork Changes
 
@@ -56,6 +56,7 @@ freemind-code/
 
 GNU General Public License v2. See [COPYING](COPYING) for details.
 
-## Support the Author
+---
 
-Support the Author of this project by signing up for [OpenCode Go](https://opencode.ai/go?ref=DWTNHGN9KX) 🚀
+Sign up for [OpenCode Go](https://opencode.ai/go?ref=DWTNHGN9KX) 🚀
+

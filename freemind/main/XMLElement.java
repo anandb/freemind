@@ -712,6 +712,7 @@ public class XMLElement {
 	 * @deprecated Use {@link #setAttribute(java.lang.String, java.lang.Object)
 	 *             setAttribute} instead.
 	 */
+	@Deprecated
 	public void addProperty(String name, Object value) {
 		this.setAttribute(name, value);
 	}
@@ -773,6 +774,7 @@ public class XMLElement {
 	 * @deprecated Use {@link #setIntAttribute(java.lang.String, int)
 	 *             setIntAttribute} instead.
 	 */
+	@Deprecated
 	public void addProperty(String key, int value) {
 		this.setIntAttribute(key, value);
 	}
@@ -834,6 +836,7 @@ public class XMLElement {
 	 * @deprecated Use {@link #setDoubleAttribute(java.lang.String, double)
 	 *             setDoubleAttribute} instead.
 	 */
+	@Deprecated
 	public void addProperty(String name, double value) {
 		this.setDoubleAttribute(name, value);
 	}
@@ -972,6 +975,7 @@ public class XMLElement {
 	 * 
 	 * @deprecated Use {@link #getContent() getContent} instead.
 	 */
+	@Deprecated
 	public String getContents() {
 		return this.getContent();
 	}
@@ -2062,6 +2066,7 @@ public class XMLElement {
 	 * @deprecated Use {@link #removeAttribute(java.lang.String)
 	 *             removeAttribute} instead.
 	 */
+	@Deprecated
 	public void removeProperty(String name) {
 		this.removeAttribute(name);
 	}
@@ -2074,6 +2079,7 @@ public class XMLElement {
 	 * @deprecated Use {@link #removeAttribute(java.lang.String)
 	 *             removeAttribute} instead.
 	 */
+	@Deprecated
 	public void removeChild(String name) {
 		this.removeAttribute(name);
 	}
@@ -2119,6 +2125,7 @@ public class XMLElement {
 	 * 
 	 * @deprecated Use {@link #setName(java.lang.String) setName} instead.
 	 */
+	@Deprecated
 	public void setTagName(String name) {
 		this.setName(name);
 	}

@@ -46,7 +46,7 @@
                         </goals>
                         <configuration>
                             <target>
-                                <ant antfile="${project.basedir}/../build.xml" target="uberjar" dir="${project.basedir}/.."/>
+                                <ant antfile="${project.basedir}/../fm-build.xml" target="uberjar" dir="${project.basedir}/.."/>
                             </target>
                         </configuration>
                     </execution>

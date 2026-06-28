@@ -194,6 +194,7 @@ public class MapModuleManager {
 	 * @deprecated use getMapModuleVector instead (and get the displayname as
 	 *             MapModule.getDisplayName().
 	 */
+	@Deprecated
 	public Map<String, MapModule> getMapModules() {
 		HashMap<String, MapModule> returnValue = new HashMap<>();
 		for (MapModule module : mapModuleVector) {

@@ -47,7 +47,9 @@ public interface FreeMindMain {
 
 	public JFrame getJFrame();
 
-	public boolean isApplet();
+	default public boolean isApplet() {
+		return false;
+	}
 
 	public MapView getView();
 

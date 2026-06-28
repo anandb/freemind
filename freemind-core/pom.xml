@@ -180,14 +180,11 @@
                     <include>patterns.xml</include>
                     <include>patterns_updater.xslt</include>
                     <include>mindmap_menus.xml</include>
-                    <include>Resources*.properties</include>
+                    <include>Resources_en.properties</include>
                     <include>dictionar*</include>
                     <include>freemind.xsd</include>
                     <include>freemind_actions.xsd</include>
                 </includes>
-                <excludes>
-                    <exclude>Resources_*.properties</exclude>
-                </excludes>
             </resource>
             <!-- Images -->
             <resource>
@@ -298,7 +295,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <configuration>
-                    <finalName>freemind</finalName>
                     <archive>
                         <manifest>
                             <mainClass>freemind.main.FreeMindStarter</mainClass>

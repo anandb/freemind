@@ -70,6 +70,7 @@ public class EnterPasswordDialog extends JDialog {
 	/**
 	 * @deprecated do not use. This is for visual editor only.
 	 */
+	@Deprecated
 	public EnterPasswordDialog() {
 
 	}

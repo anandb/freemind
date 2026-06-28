@@ -223,15 +223,6 @@ public class MenuBar extends JMenuBar {
 		menuHolder.addSeparator(POPUP_MENU);
 		JMenuItem newPopupItem;
 
-		if (c.getFrame().isApplet()) {
-			// We have enabled hiding of menubar only in applets. It it because
-			// when we hide menubar in application, the key accelerators from
-			// menubar do not work.
-			newPopupItem = menuHolder.addAction(c.toggleMenubar, POPUP_MENU
-					+ "toggleMenubar");
-			newPopupItem.setForeground(new Color(100, 80, 80));
-		}
-
 		newPopupItem = menuHolder.addAction(c.toggleToolbar, POPUP_MENU
 				+ "toggleToolbar");
 		newPopupItem.setForeground(new Color(100, 80, 80));

@@ -187,7 +187,7 @@ public class Registration implements HookRegistration, ActorXml,
 
 	private static Timer sTimer;
 
-	private static Boolean sTimerSemaphore = Boolean.valueOf(false);
+	private static final Object sTimerSemaphore = new Object();
 
 	private IntHolder mCachePurgerSemaphore = new IntHolder(0);
 

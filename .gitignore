@@ -34,3 +34,5 @@ Thumbs.db
 
 # Generated (regenerate with `ant gen`)
 lib/bindings.jar
+build.xml
+version.properties

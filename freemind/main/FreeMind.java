@@ -464,10 +464,6 @@ public class FreeMind extends JFrame implements FreeMindMain, ActionListener {
 		mFreeMindCommon.loadUIProperties(defProps);
 	}
 
-	public boolean isApplet() {
-		return false;
-	}
-
 	public File getPatternsFile() {
 		return patternsFile;
 	}

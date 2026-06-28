@@ -414,6 +414,7 @@ public class PrintGraphics extends Graphics2D {
 		mG.dispose();
 	}
 
+	@SuppressWarnings("removal")
 	public void finalize() {
 		mG.finalize();
 	}

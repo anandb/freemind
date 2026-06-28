@@ -218,7 +218,13 @@ public class ToolsTests extends FreeMindTestBase {
 		 * (this is normally done in FreeMind) breaks the update. This is tested
 		 * here.
 		 */
-		System.setSecurityManager(new FreeMindSecurityManager());
+		try {
+			System.setSecurityManager(new FreeMindSecurityManager());
+		} catch (UnsupportedOperationException e) {
+			// SecurityManager is deprecated for removal in Java 21+;
+			// skip test when JVM doesn't allow it.
+			return;
+		}
 		doUpdate();
 	}
 

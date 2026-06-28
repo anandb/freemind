@@ -1006,18 +1006,16 @@ public class Controller implements MapModuleChangeObserver {
 		// shortcuts
 		setProperty("toolbarVisible", toolbarVisible ? "true" : "false");
 		setProperty("leftToolbarVisible", leftToolbarVisible ? "true" : "false");
-		if (!getFrame().isApplet()) {
-			final int winState = getFrame().getWinState();
-			if (JFrame.MAXIMIZED_BOTH != (winState & JFrame.MAXIMIZED_BOTH)) {
-				setProperty("appwindow_x", String.valueOf(getFrame().getWinX()));
-				setProperty("appwindow_y", String.valueOf(getFrame().getWinY()));
-				setProperty("appwindow_width",
-						String.valueOf(getFrame().getWinWidth()));
-				setProperty("appwindow_height",
-						String.valueOf(getFrame().getWinHeight()));
-			}
-			setProperty("appwindow_state", String.valueOf(winState));
+		final int winState = getFrame().getWinState();
+		if (JFrame.MAXIMIZED_BOTH != (winState & JFrame.MAXIMIZED_BOTH)) {
+			setProperty("appwindow_x", String.valueOf(getFrame().getWinX()));
+			setProperty("appwindow_y", String.valueOf(getFrame().getWinY()));
+			setProperty("appwindow_width",
+					String.valueOf(getFrame().getWinWidth()));
+			setProperty("appwindow_height",
+					String.valueOf(getFrame().getWinHeight()));
 		}
+		setProperty("appwindow_state", String.valueOf(winState));
 		// Stop edit server!
 		getFrame().saveProperties(true);
 		// save to properties

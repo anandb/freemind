@@ -632,26 +632,24 @@ public class FilterComposerDialog extends JDialog {
 		controllerBox.add(btnCancel);
 		controllerBox.add(Box.createHorizontalGlue());
 
-		if (!controller.getFrame().isApplet()) {
-			ActionListener saveAction = new SaveAction();
-			btnSave = new JButton();
-			Tools.setLabelAndMnemonic(btnSave, Resources.getInstance()
-					.getResourceString("save"));
-			btnSave.addActionListener(saveAction);
-			btnSave.setMaximumSize(maxButtonDimension);
+		ActionListener saveAction = new SaveAction();
+		btnSave = new JButton();
+		Tools.setLabelAndMnemonic(btnSave, Resources.getInstance()
+				.getResourceString("save"));
+		btnSave.addActionListener(saveAction);
+		btnSave.setMaximumSize(maxButtonDimension);
 
-			ActionListener loadAction = new LoadAction();
-			btnLoad = new JButton();
-			Tools.setLabelAndMnemonic(btnLoad, Resources.getInstance()
-					.getResourceString("load"));
-			btnLoad.addActionListener(loadAction);
-			btnLoad.setMaximumSize(maxButtonDimension);
+		ActionListener loadAction = new LoadAction();
+		btnLoad = new JButton();
+		Tools.setLabelAndMnemonic(btnLoad, Resources.getInstance()
+				.getResourceString("load"));
+		btnLoad.addActionListener(loadAction);
+		btnLoad.setMaximumSize(maxButtonDimension);
 
-			controllerBox.add(btnSave);
-			controllerBox.add(Box.createHorizontalGlue());
-			controllerBox.add(btnLoad);
-			controllerBox.add(Box.createHorizontalGlue());
-		}
+		controllerBox.add(btnSave);
+		controllerBox.add(Box.createHorizontalGlue());
+		controllerBox.add(btnLoad);
+		controllerBox.add(Box.createHorizontalGlue());
 		conditionList = new JList<>();
 		conditionList
 				.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
