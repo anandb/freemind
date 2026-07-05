@@ -36,3 +36,5 @@ Thumbs.db
 lib/bindings.jar
 build.xml
 version.properties
+.idea
+nb-*.xml

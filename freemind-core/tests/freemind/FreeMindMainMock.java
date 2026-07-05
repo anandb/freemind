@@ -28,7 +28,6 @@ import java.net.URLClassLoader;
 import java.util.List;
 import java.util.Properties;
 import java.util.ResourceBundle;
-import java.util.Vector;
 import java.util.logging.Logger;
 
 import javax.swing.JComponent;
@@ -44,84 +43,100 @@ import freemind.main.FreeMindStarter;
 import freemind.main.Resources;
 import freemind.main.Tools;
 import freemind.view.mindmapview.MapView;
+import java.util.ArrayList;
 
-/** */
 public class FreeMindMainMock implements FreeMindMain {
 
-	private Properties mProperties;
+	private final Properties mProperties;
 
-	/**
-     * 
-     */
 	public FreeMindMainMock() {
+
 		super();
 		mProperties = new FreeMindStarter().readDefaultPreferences();
 		Resources.createInstance(this);
 
 	}
 
+	@Override
 	public JFrame getJFrame() {
 		return null;
 	}
 
+	@Override
 	public boolean isApplet() {
 		return false;
 	}
 
+	@Override
 	public MapView getView() {
 		return null;
 	}
 
+	@Override
 	public void setView(MapView view) {
 	}
 
+	@Override
 	public Controller getController() {
 		return null;
 	}
 
+	@Override
 	public void setWaitingCursor(boolean waiting) {
 	}
 
+	@Override
 	public File getPatternsFile() {
 		return null;
 	}
 
+	@Override
 	public MenuBar getFreeMindMenuBar() {
 		return null;
 	}
 
+	@Override
 	public ResourceBundle getResources() {
 		return null;
 	}
 
+	@Override
 	public String getResourceString(String key) {
 		return key;
 	}
 
+	@Override
 	public String getResourceString(String key, String resource) {
 		return key;
 	}
 
+	@Override
 	public Container getContentPane() {
 		return null;
 	}
 
+	@Override
 	public void out(String msg) {
 	}
 
+	@Override
 	public void err(String msg) {
 	}
 
+	@Override
 	public void openDocument(URL location) throws Exception {
 	}
 
+	@Override
 	public void repaint() {
 	}
 
+	@Override
 	public URL getResource(String name) {
 		return ClassLoader.getSystemResource(name);
 	}
 
+	@Override
 	public int getIntProperty(String key, int defaultValue) {
 		try {
 			return Integer.parseInt(getProperty(key));
@@ -130,60 +145,75 @@ public class FreeMindMainMock implements FreeMindMain {
 		}
 	}
 
+	@Override
 	public Properties getProperties() {
 		return mProperties;
 	}
 
+	@Override
 	public String getProperty(String key) {
 		return mProperties.getProperty(key);
 	}
 
+	@Override
 	public void setProperty(String key, String value) {
 	}
 
+	@Override
 	public void saveProperties(boolean pIsShutdown) {
 	}
 
+	@Override
 	public String getFreemindDirectory() {
 		return ".";
 	}
 
+	@Override
 	public JLayeredPane getLayeredPane() {
 		return null;
 	}
 
+	@Override
 	public void setTitle(String title) {
 	}
 
+	@Override
 	public int getWinHeight() {
 		return 0;
 	}
 
+	@Override
 	public int getWinWidth() {
 		return 0;
 	}
 
+	@Override
 	public int getWinState() {
 		return 0;
 	}
 
+	@Override
 	public int getWinX() {
 		return 0;
 	}
 
+	@Override
 	public int getWinY() {
 		return 0;
 	}
 
+	@Override
 	public VersionInformation getFreemindVersion() {
 		return new VersionInformation(1, 0, 0, FreeMindMain.VERSION_TYPE_ALPHA,
 				42);
 	}
 
+	@Override
 	public Logger getLogger(String forClass) {
 		return java.util.logging.Logger.getLogger(forClass);
 	}
 
+	@Override
 	public ClassLoader getFreeMindClassLoader() {
 		ClassLoader classLoader = this.getClass().getClassLoader();
 		try {
@@ -195,38 +225,46 @@ public class FreeMindMainMock implements FreeMindMain {
 		}
 	}
 
+	@Override
 	public String getFreemindBaseDir() {
 		return ".";
 	}
 
+	@Override
 	public String getAdjustableProperty(String pLabel) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	@Override
 	public void setDefaultProperty(String pKey, String pValue) {
 		// TODO Auto-generated method stub
 
 	}
 
+	@Override
 	public JSplitPane insertComponentIntoSplitPane(JComponent pParameter) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	@Override
 	public void removeSplitPane() {
 		// TODO Auto-generated method stub
 
 	}
 
+	@Override
 	public JComponent getContentComponent() {
 		return null;
 	}
 
+	@Override
 	public JScrollPane getScrollPane() {
 		return null;
 	}
 
+	@Override
 	public void registerStartupDoneListener(
 			StartupDoneListener pStartupDoneListener) {
 		// TODO Auto-generated method stub
@@ -236,8 +274,8 @@ public class FreeMindMainMock implements FreeMindMain {
 	/* (non-Javadoc)
 	 * @see freemind.main.FreeMindMain#getLoggerList()
 	 */
+	@Override
 	public List getLoggerList() {
-		return new Vector<>();
+		return new ArrayList<>();
 	}
-
 }
