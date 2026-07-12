@@ -45,6 +45,8 @@ import java.awt.print.PrinterJob;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -1276,7 +1278,12 @@ public class Controller implements MapModuleChangeObserver {
 				map = Tools.removeTranslateComment(map);
 				URL url = null;
 				if (map != null && map.startsWith(".")) {
-					url = localDocumentationLinkConverter.convertLocalLink(map);
+					// Try classpath resource first (works inside uber jars)
+					String resourcePath = map.substring(2); // strip "./"
+					url = getClass().getResource("/" + resourcePath);
+					if (url == null) {
+						url = localDocumentationLinkConverter.convertLocalLink(map);
+					}
 				} else {
 					url = Tools.fileToUrl(new File(map));
 				}
@@ -1319,8 +1326,27 @@ public class Controller implements MapModuleChangeObserver {
 			try {
 				URL url = null;
 				if (urlText != null && urlText.startsWith(".")) {
-					url = localDocumentationLinkConverter
-							.convertLocalLink(urlText);
+					// Try classpath resource first (works inside uber jars)
+					String resourcePath = urlText.substring(2); // strip "./"
+					InputStream is = getClass().getResourceAsStream("/" + resourcePath);
+					if (is != null) {
+						// Extract to temp file so Desktop.browse can open it
+						File tempFile = File.createTempFile("freemind_keydoc", ".pdf");
+						tempFile.deleteOnExit();
+						FileOutputStream fos = new FileOutputStream(tempFile);
+						byte[] buf = new byte[4096];
+						int n;
+						while ((n = is.read(buf)) != -1) {
+							fos.write(buf, 0, n);
+						}
+						fos.close();
+						is.close();
+						url = Tools.fileToUrl(tempFile);
+					} else {
+						// Fall back to file-based resolution
+						url = localDocumentationLinkConverter
+								.convertLocalLink(urlText);
+					}
 				} else {
 					url = Tools.fileToUrl(new File(urlText));
 				}

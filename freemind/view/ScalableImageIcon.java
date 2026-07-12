@@ -33,7 +33,7 @@ import javax.swing.ImageIcon;
 public class ScalableImageIcon extends ImageIcon {
 	private static final long serialVersionUID = 1110980781217268145L;
 
-	private float mScale = 2.0f;
+	private float mScale = 1.0f;
 
 	private Image mScaledImage;
 

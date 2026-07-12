@@ -111,18 +111,18 @@ public class ImageFactory {
 	 * @return
 	 */
 	public ImageIcon createIcon(String pFilePath) {
-		if(Tools.getScalingFactorPlain()==200){
-			// test for existence  of a scaled icon:
-			if(pFilePath.endsWith(".png")){
-				try {
-					URL url = Resources.getInstance().getResource(pFilePath.replaceAll(".png$", "_32.png"));
-					URLConnection connection = url.openConnection();
-					if(connection.getContentLength()>0){
-						return createUnscaledIcon(url);
-					}
-				} catch (IOException e) {
-					freemind.main.Resources.getInstance().logException(e);
+		int scaleFactor = Tools.getScalingFactorPlain();
+		if(scaleFactor != 100 && pFilePath.endsWith(".png")){
+			// Try to find a scaled variant (e.g., icon_32.png for 200%)
+			String scaledSuffix = "_" + (scaleFactor / 100 * 16) + ".png";
+			try {
+				URL url = Resources.getInstance().getResource(pFilePath.replaceAll(".png$", scaledSuffix));
+				URLConnection connection = url.openConnection();
+				if(connection.getContentLength()>0){
+					return createUnscaledIcon(url);
 				}
+			} catch (Exception e) {
+				// Fall through to unscaled icon
 			}
 		}
 		return createIcon(Resources.getInstance().getResource(pFilePath));

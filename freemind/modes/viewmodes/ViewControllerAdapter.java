@@ -22,11 +22,13 @@
 
 package freemind.modes.viewmodes;
 
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 import freemind.extensions.NodeHook;
 import freemind.extensions.PermanentNodeHookSubstituteUnknown;
+import freemind.main.Tools;
 import freemind.modes.ControllerAdapter;
 import freemind.modes.MindMapNode;
 import freemind.modes.Mode;
@@ -76,6 +78,10 @@ public abstract class ViewControllerAdapter extends ControllerAdapter {
 				.getNodeView();
 		// MindMapNode newlySelectedNode = newlySelectedNodeView.getModel();
 		boolean extend = e.isControlDown();
+		// On macOS, Cmd+click extends selection (like Ctrl on other platforms)
+		if (Tools.isMacOsX()) {
+			extend |= e.isMetaDown();
+		}
 		boolean range = e.isShiftDown();
 		boolean branch = e.isAltGraphDown() || e.isAltDown(); /*
 															 * windows alt,

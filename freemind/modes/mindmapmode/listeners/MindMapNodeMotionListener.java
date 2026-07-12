@@ -158,7 +158,8 @@ public class MindMapNodeMotionListener extends NodeMotionAdapter {
 				c.moveNodePosition(node, node.getVGap(), NodeAdapter.HGAP, 0);
 				return;
 			}
-			if (e.getModifiersEx() == InputEvent.CTRL_DOWN_MASK) {
+			if (e.getModifiersEx() == InputEvent.CTRL_DOWN_MASK
+				|| (Tools.isMacOsX() && e.getModifiersEx() == InputEvent.META_DOWN_MASK)) {
 				NodeView nodeV = getNodeView(e);
 				MindMapNode node = nodeV.getModel();
 				c.moveNodePosition(node, NodeAdapter.VGAP, node.getHGap(),

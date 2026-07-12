@@ -184,7 +184,7 @@ public class EditNodeTextField extends EditNodeBase {
 		// Bind the undo action to ctl-Z (or command-Z on mac)
 		textfield.getInputMap().put(
 				KeyStroke.getKeyStroke(KeyEvent.VK_Z, Toolkit
-						.getDefaultToolkit().getMenuShortcutKeyMask()), "Undo");
+						.getDefaultToolkit().getMenuShortcutKeyMaskEx()), "Undo");
 
 		// Create a redo action and add it to the text component
 		textfield.getActionMap().put("Redo", new AbstractAction("Redo") {
@@ -201,7 +201,7 @@ public class EditNodeTextField extends EditNodeBase {
 		// Bind the redo action to ctl-Y (or command-Y on mac)
 		textfield.getInputMap().put(
 				KeyStroke.getKeyStroke(KeyEvent.VK_Y, Toolkit
-						.getDefaultToolkit().getMenuShortcutKeyMask()), "Redo");
+						.getDefaultToolkit().getMenuShortcutKeyMaskEx()), "Redo");
 
 		// screen positionining ---------------------------------------------
 

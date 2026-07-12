@@ -224,6 +224,15 @@
                     <include>*.xml</include>
                 </includes>
             </resource>
+            <!-- Documentation (PDFs, maps) -->
+            <resource>
+                <directory>${project.basedir}/../doc</directory>
+                <targetPath>doc</targetPath>
+                <includes>
+                    <include>*.pdf</include>
+                    <include>*.mm</include>
+                </includes>
+            </resource>
         </resources>
 
         <testResources>

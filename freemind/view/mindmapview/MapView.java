@@ -1310,7 +1310,7 @@ public class MapView extends JPanel implements ViewAbstraction, Printable, Autos
 		final Stroke s = g.getStroke();
 		g.setColor(MapView.standardSelectRectangleColor);
 		if (standardSelectionStroke == null) {
-			standardSelectionStroke = new BasicStroke(2.0f);
+			standardSelectionStroke = new BasicStroke(2.0f * Tools.getScalingFactor());
 		}
 		g.setStroke(standardSelectionStroke);
 		Object renderingHint = setEdgesRenderingHint(g);

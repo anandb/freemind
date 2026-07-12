@@ -72,7 +72,8 @@ public class FreeMindToolBar extends JToolBar {
 		JButton btn = new JButton() {
 			@Override
 			public Point getToolTipLocation(MouseEvent event) {
-				return new Point(event.getX(), event.getY() - 32);
+				int tooltipOffset = (int) (32 * Tools.getScalingFactor());
+				return new Point(event.getX(), event.getY() - tooltipOffset);
 			}
 		};
 		btn.setAction(a);

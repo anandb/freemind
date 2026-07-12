@@ -34,6 +34,7 @@ import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
+import freemind.main.Tools;
 import freemind.modes.MindMapArrowLink;
 
 // end Convex Hull
@@ -214,7 +215,7 @@ public class ArrowLinkView {
 	}
 
 	/** MAXIMAL_RECTANGLE_SIZE_FOR_COLLISION_DETECTION describes itself. */
-	private final int MAXIMAL_RECTANGLE_SIZE_FOR_COLLISION_DETECTION = 16;
+	private final int MAXIMAL_RECTANGLE_SIZE_FOR_COLLISION_DETECTION = (int) (16 * Tools.getScalingFactor());
 
 	/**
 	 * Determines, whether or not a given point p is in an epsilon-neighbourhood
