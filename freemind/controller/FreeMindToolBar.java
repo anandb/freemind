@@ -24,6 +24,8 @@
 package freemind.controller;
 
 import java.awt.Insets;
+import java.awt.Point;
+import java.awt.event.MouseEvent;
 
 import javax.swing.Action;
 import javax.swing.JButton;
@@ -65,6 +67,18 @@ public class FreeMindToolBar extends JToolBar {
 		setFloatable(false);
 	}
 
+	@Override
+	protected JButton createActionComponent(Action a) {
+		JButton btn = new JButton() {
+			@Override
+			public Point getToolTipLocation(MouseEvent event) {
+				return new Point(event.getX(), event.getY() - 32);
+			}
+		};
+		btn.setAction(a);
+		return btn;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -85,6 +99,7 @@ public class FreeMindToolBar extends JToolBar {
 			returnValue.setBorderPainted(false);
 		}
 		returnValue.setContentAreaFilled(false);
+		returnValue.setBorderPainted(false);
 
 		return returnValue;
 	}

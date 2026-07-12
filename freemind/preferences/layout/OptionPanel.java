@@ -392,7 +392,7 @@ public class OptionPanel implements TextTranslator {
 		}
 
 		public void disableModifiers() {
-			modifierMask = KeyEvent.ALT_MASK | KeyEvent.CTRL_MASK;
+			modifierMask = KeyEvent.ALT_MASK | freemind.main.Tools.getModifierMask();
 		}
 
 		public String getDescription() {
@@ -669,7 +669,7 @@ public class OptionPanel implements TextTranslator {
 		controls.add(new NewTabProperty("Appearance"));
 		controls.add(new SeparatorProperty("look_and_feel"));
 		LookAndFeelInfo[] lafInfo = UIManager.getInstalledLookAndFeels();
-		int reservedCount = 10;
+		int reservedCount = 8;
 		String[] lafNames = new String[lafInfo.length + reservedCount];
 		Vector<String> translatedLafNames = new Vector<>();
 		lafNames[0] = "default";
@@ -686,6 +686,8 @@ public class OptionPanel implements TextTranslator {
 		translatedLafNames.add(getText("nothing"));
 		lafNames[6] = "javax.swing.plaf.nimbus.NimbusLookAndFeel";
 		translatedLafNames.add("Nimbus");
+		lafNames[7] = "com.incors.plaf.kunststoff.KunststoffLookAndFeel";
+		translatedLafNames.add("Kunststoff");
 		for (int i = 0; i < lafInfo.length; i++) {
 			LookAndFeelInfo info = lafInfo[i];
 			String className = info.getClassName();

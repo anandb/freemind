@@ -22,10 +22,11 @@
 /*$Id: FreeMindStarter.java,v 1.1.2.11 2009/03/29 19:37:23 christianfoltin Exp $*/
 package freemind.main;
 
-import java.awt.Toolkit;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 import java.net.Authenticator;
 import java.net.PasswordAuthentication;
@@ -60,8 +61,11 @@ public class FreeMindStarter {
 				starter.readUsersPreferences(defaultPreferences);
 		starter.setDefaultLocale(userPreferences);
 
-		// Christopher Robin Elmersson: set
-		Toolkit xToolkit = Toolkit.getDefaultToolkit();
+		// HiDPI: detect and set sun.java2d.uiScale BEFORE any AWT/Swing init.
+		// This must happen before Toolkit.getDefaultToolkit() to ensure the
+		// Java2D rendering pipeline uses the correct scale for hit-testing
+		// and coordinate mapping (fixes mouse pointer drift on HiDPI displays).
+		starter.initHiDpiScaling(userPreferences);
 
 		// workaround for java bug http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=7075600
 		System.setProperty("java.util.Arrays.useLegacyMergeSort", "true");
@@ -131,6 +135,83 @@ public class FreeMindStarter {
 			return;
 		}
 		Locale.setDefault(localeDef);
+	}
+
+	/**
+	 * Detect and set sun.java2d.uiScale BEFORE any AWT/Swing initialization.
+	 * Priority: explicit JVM property > scaling_factor_property > Xft.dpi auto-detect.
+	 * This fixes mouse pointer drift on HiDPI displays where the Java2D
+	 * rendering pipeline needs to know the display scale factor upfront.
+	 */
+	private void initHiDpiScaling(Properties userPreferences) {
+		// 1. If already set via -D flag, respect it
+		String existing = System.getProperty("sun.java2d.uiScale");
+		if (existing != null) {
+			System.out.println("HiDPI: sun.java2d.uiScale already set to " + existing);
+			return;
+		}
+
+		float scale = 0f;
+
+		// 2. Check scaling_factor_property (user preference, e.g. 150 = 1.5x)
+		String scaleProp = userPreferences.getProperty("scaling_factor_property");
+		if (scaleProp != null) {
+			try {
+				int pct = Integer.parseInt(scaleProp.trim());
+				if (pct > 0 && pct != 100) {
+					scale = pct / 100f;
+					System.out.println("HiDPI: using scaling_factor_property=" + pct + " -> uiScale=" + scale);
+				}
+			} catch (NumberFormatException e) {
+				// ignore
+			}
+		}
+
+		// 3. Auto-detect from Xft.dpi (set by GNOME/KDE/Xresources)
+		if (scale <= 0f) {
+			scale = detectXftDpiScale();
+		}
+
+		if (scale > 0f && Math.abs(scale - 1.0f) > 0.01f) {
+			System.setProperty("sun.java2d.uiScale", String.valueOf(scale));
+			System.out.println("HiDPI: set sun.java2d.uiScale=" + scale);
+		}
+	}
+
+	/**
+	 * Read Xft.dpi from X resource database and compute scale relative to 96 DPI.
+	 * Returns 0 if detection fails.
+	 */
+	private float detectXftDpiScale() {
+		try {
+			Process proc = new ProcessBuilder("xrdb", "-query")
+					.redirectErrorStream(true)
+					.start();
+			try (BufferedReader reader = new BufferedReader(
+					new InputStreamReader(proc.getInputStream()))) {
+				String line;
+				while ((line = reader.readLine()) != null) {
+					if (line.startsWith("Xft.dpi:")) {
+						String val = line.substring("Xft.dpi:".length()).trim();
+						float dpi = Float.parseFloat(val);
+						if (dpi > 0) {
+							float detected = dpi / 96f;
+							System.out.println("HiDPI: Xft.dpi=" + dpi
+									+ " -> detected scale=" + detected);
+							// Only apply if meaningfully different from 1.0
+							if (Math.abs(detected - 1.0f) > 0.01f) {
+								return detected;
+							}
+						}
+						break;
+					}
+				}
+			}
+			proc.waitFor();
+		} catch (Exception e) {
+			// xrdb not available or failed — not a problem
+		}
+		return 0f;
 	}
 
 	private Properties readUsersPreferences(Properties defaultPreferences) {

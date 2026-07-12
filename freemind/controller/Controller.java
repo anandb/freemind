@@ -77,6 +77,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
+import javax.swing.MenuSelectionManager;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import javax.swing.event.ChangeEvent;
@@ -805,8 +806,11 @@ public class Controller implements MapModuleChangeObserver {
 	}
 
 	public void obtainFocusForSelected() {
-		KeyboardFocusManager.getCurrentKeyboardFocusManager()
-				.clearGlobalFocusOwner();
+		// Don't clear focus owner while a menu is open — it forcibly dismisses popups.
+		if (MenuSelectionManager.defaultManager().getSelectedPath().length == 0) {
+			KeyboardFocusManager.getCurrentKeyboardFocusManager()
+					.clearGlobalFocusOwner();
+		}
 		// logger.finest("obtainFocusForSelected");
 		if (getView() != null) { // is null if the last map was closed.
 			logger.fine("Requesting Focus for " + getView() + " in model "

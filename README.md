@@ -9,7 +9,6 @@ Fork of [FreeMind](https://freemind.sourceforge.io) — a mind mapping applicati
 - **Java 21** target (was Java 8/11)
 - Generated `lib/bindings.jar` via antrun plugin from JiBX schema
 - Removed NetBeans Ant project metadata (`nbproject/`, `build.xml`)
-- Added **FlatLaf** look-and-feel with custom theming (`freemind-core/src/main/resources/FlatLaf.properties`)
 - JUnit 4 with vintage engine for backward-compatible test execution
 
 #### Defaults
@@ -38,7 +37,6 @@ Fork of [FreeMind](https://freemind.sourceforge.io) — a mind mapping applicati
 #### Dependencies
 - Updated JGoodies Forms 1.8.0 / Common 1.8.1
 - Updated BCEL 6.7.0
-- FlatLaf 3.5.4
 
 ## Building
 

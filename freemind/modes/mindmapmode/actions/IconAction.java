@@ -52,28 +52,21 @@ public class IconAction extends MindmapAction implements IconInformation {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if (e.getID() == ActionEvent.ACTION_FIRST
+		if (e != null && e.getID() == ActionEvent.ACTION_FIRST
 				&& (e.getModifiers() & ActionEvent.SHIFT_MASK
-						& ~ActionEvent.CTRL_MASK & ~ActionEvent.ALT_MASK) != 0) {
+						& ~freemind.main.Tools.getModifierMask() & ~ActionEvent.ALT_MASK) != 0) {
 			removeAllIcons();
 			addLastIcon();
-			return;
-		}
-		if (e == null
-				|| (e.getModifiers() & (ActionEvent.CTRL_MASK | ActionEvent.ALT_MASK)) == 0) {
+		} else if (e == null
+				|| (e.getModifiers() & (freemind.main.Tools.getModifierMask() | ActionEvent.ALT_MASK)) == 0) {
 			addLastIcon();
-			return;
-		}
-		// e != null
-		if ((e.getModifiers() & ~ActionEvent.SHIFT_MASK
-				& ~ActionEvent.CTRL_MASK & ActionEvent.ALT_MASK) != 0) {
+		} else if (e != null && (e.getModifiers() & ~ActionEvent.SHIFT_MASK
+				& ~freemind.main.Tools.getModifierMask() & ActionEvent.ALT_MASK) != 0) {
 			removeIcon(false);
-			return;
-		}
-		if ((e.getModifiers() & ~ActionEvent.SHIFT_MASK & ActionEvent.CTRL_MASK & ~ActionEvent.ALT_MASK) != 0) {
+		} else if (e != null && (e.getModifiers() & ~ActionEvent.SHIFT_MASK & freemind.main.Tools.getModifierMask() & ~ActionEvent.ALT_MASK) != 0) {
 			removeIcon(true);
-			return;
 		}
+		modeController.focusMapView();
 	}
 
 	private void addLastIcon() {

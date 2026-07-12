@@ -319,6 +319,18 @@
                             <file>${project.basedir}/plugins/svg/pdf-transcoder.jar</file>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>install-kunststoff</id>
+                        <phase>initialize</phase>
+                        <goals><goal>install-file</goal></goals>
+                        <configuration>
+                            <groupId>com.incors</groupId>
+                            <artifactId>kunstoff-laf</artifactId>
+                            <version>2.0.2</version>
+                            <packaging>jar</packaging>
+                            <file>${project.basedir}/lib/kunstoff-laf-2.0.2.jar</file>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
         </plugins>

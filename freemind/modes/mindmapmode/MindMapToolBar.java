@@ -74,6 +74,7 @@ public class MindMapToolBar extends FreeMindToolBar implements ZoomListener {
 	private JComboBox<String> fonts, size;
 	private JAutoScrollBarPane iconToolBarScrollPane;
 	private JToolBar iconToolBar;
+	private javax.swing.JTextField searchBox;
 	private JToolBar removeToolBar;
 	private boolean fontSize_IgnoreChangeEvent = false;
 	private boolean fontFamily_IgnoreChangeEvent = false;
@@ -99,11 +100,74 @@ public class MindMapToolBar extends FreeMindToolBar implements ZoomListener {
 		fonts.setFocusable(false);
 		size = new FreeMindComboBox(sizes);
 		size.setFocusable(false);
+		
+		String osName = System.getProperty("os.name").toLowerCase();
+		final String placeholderText = (osName.contains("mac") || osName.contains("darwin")) ? "CMD + L" : "CTRL + L";
+
+		searchBox = new javax.swing.JTextField() {
+			@Override
+			protected void paintComponent(java.awt.Graphics g) {
+				super.paintComponent(g);
+				if (getText().isEmpty()) {
+					java.awt.Graphics2D g2d = (java.awt.Graphics2D) g.create();
+					try {
+						g2d.setRenderingHint(java.awt.RenderingHints.KEY_TEXT_ANTIALIASING, java.awt.RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+						g2d.setColor(new java.awt.Color(128, 128, 128));
+						g2d.setFont(getFont());
+						java.awt.Insets insets = getInsets();
+						int x = (insets != null) ? insets.left + 2 : 5;
+						java.awt.FontMetrics fm = g2d.getFontMetrics();
+						int y = (getHeight() - fm.getHeight()) / 2 + fm.getAscent();
+						g2d.drawString(placeholderText, x, y);
+					} finally {
+						g2d.dispose();
+					}
+				}
+			}
+		};
+		searchBox.setToolTipText("Search icons (" + placeholderText + ")");
+		searchBox.putClientProperty("JTextField.placeholderText", placeholderText);
+		javax.swing.UIManager.put("Component.placeholderForeground", new java.awt.Color(128, 128, 128));
+		searchBox.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+			public void insertUpdate(javax.swing.event.DocumentEvent e) { filterIcons(searchBox.getText()); }
+			public void removeUpdate(javax.swing.event.DocumentEvent e) { filterIcons(searchBox.getText()); }
+			public void changedUpdate(javax.swing.event.DocumentEvent e) { filterIcons(searchBox.getText()); }
+		});
+		searchBox.addKeyListener(new java.awt.event.KeyAdapter() {
+			public void keyPressed(java.awt.event.KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_UP ||
+					e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_RIGHT) {
+					e.consume();
+					boolean focused = false;
+					for (java.awt.Component comp : removeToolBar.getComponents()) {
+						if (comp.isVisible() && comp instanceof AbstractButton) {
+							comp.requestFocusInWindow();
+							focused = true;
+							break;
+						}
+					}
+					if (!focused) {
+						for (java.awt.Component comp : iconToolBar.getComponents()) {
+							if (comp.isVisible() && comp instanceof AbstractButton) {
+								comp.requestFocusInWindow();
+								break;
+							}
+						}
+					}
+				} else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					for (java.awt.Component comp : iconToolBar.getComponents()) {
+						if (comp.isVisible() && comp instanceof javax.swing.JButton) {
+							((javax.swing.JButton)comp).doClick();
+							c.focusMapView();
+							break;
+						}
+					}
+				}
+			}
+		});
+
 		iconToolBar = new FreeMindToolBar();
-		iconToolBar.setOpaque(true);
-		iconToolBar.setBackground(Color.decode("#C0D0DC"));
 		iconToolBarScrollPane = new JAutoScrollBarPane(iconToolBar);
-		iconToolBarScrollPane.getViewport().setBackground(Color.decode("#C0D0DC"));
 		removeToolBar = new FreeMindToolBar();
 		removeToolBar.setFloatable(false);
 		removeToolBar.setBorderPainted(false);
@@ -119,25 +183,6 @@ public class MindMapToolBar extends FreeMindToolBar implements ZoomListener {
 			iconToolBar.setLayout(new GridLayout(0, cols));
 			iconToolBarScrollPane.getVerticalScrollBar().setUnitIncrement(100);
 		}
-		// Return focus to map after ENTER on icon button. Button handles ENTER
-		// internally; we just observe and return focus afterward.
-		java.awt.KeyboardFocusManager.getCurrentKeyboardFocusManager()
-				.addKeyEventDispatcher(new java.awt.KeyEventDispatcher() {
-					public boolean dispatchKeyEvent(KeyEvent e) {
-						if (e.getID() == KeyEvent.KEY_PRESSED
-								&& e.getKeyCode() == KeyEvent.VK_ENTER) {
-							java.awt.Component focusOwner = java.awt.KeyboardFocusManager
-									.getCurrentKeyboardFocusManager().getFocusOwner();
-							if (focusOwner != null
-									&& javax.swing.SwingUtilities.isDescendingFrom(
-											focusOwner, iconToolBar)) {
-								javax.swing.SwingUtilities.invokeLater(() -> c
-										.focusMapView());
-							}
-						}
-						return false;
-					}
-				});
 		fontsListener = new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				if (e.getStateChange() != ItemEvent.SELECTED) {
@@ -266,12 +311,220 @@ public class MindMapToolBar extends FreeMindToolBar implements ZoomListener {
 		for (int i = 0; i < c.iconActions.size(); ++i) {
 			iconToolBar.add((Action) c.iconActions.get(i));
 		}
-		// Make icon buttons focusable (FreeMindToolBar.add() sets non-focusable)
-		for (int i = 0; i < iconToolBar.getComponentCount(); i++) {
-			iconToolBar.getComponent(i).setFocusable(true);
-		}
+		configureToolbarButtons(removeToolBar);
+		configureToolbarButtons(iconToolBar);
 		iconToolBar.revalidate();
 		iconToolBarScrollPane.revalidate();
+	}
+
+	private void configureToolbarButtons(JToolBar toolBar) {
+		for (int i = 0; i < toolBar.getComponentCount(); i++) {
+			java.awt.Component comp = toolBar.getComponent(i);
+			if (comp instanceof AbstractButton) {
+				final AbstractButton btn = (AbstractButton) comp;
+				btn.setFocusable(true);
+				
+				// Keep track of original visual states
+				final javax.swing.border.Border originalBorder = btn.getBorder();
+				final boolean originalBorderPainted = btn.isBorderPainted();
+				final boolean originalContentAreaFilled = btn.isContentAreaFilled();
+				final Color originalBackground = btn.getBackground();
+				final boolean originalOpaque = btn.isOpaque();
+
+				// Remove existing focus listeners if any
+				for (java.awt.event.FocusListener l : btn.getFocusListeners()) {
+					btn.removeFocusListener(l);
+				}
+
+				btn.addFocusListener(new java.awt.event.FocusListener() {
+					public void focusGained(java.awt.event.FocusEvent e) {
+						btn.setBorderPainted(true);
+						Color focusColor = javax.swing.UIManager.getColor("Component.focusColor");
+						if (focusColor == null) {
+							focusColor = new Color(26, 115, 232); // Google Blue / elegant blue
+						}
+						btn.setBorder(javax.swing.BorderFactory.createLineBorder(focusColor, 1));
+						
+						// Semi-transparent background highlight
+						Color highlightColor = new Color(
+								focusColor.getRed(), 
+								focusColor.getGreen(), 
+								focusColor.getBlue(), 
+								40);
+						btn.setBackground(highlightColor);
+						btn.setContentAreaFilled(true);
+						btn.setOpaque(false);
+						btn.repaint();
+					}
+
+					public void focusLost(java.awt.event.FocusEvent e) {
+						btn.setBorderPainted(originalBorderPainted);
+						btn.setBorder(originalBorder);
+						btn.setContentAreaFilled(originalContentAreaFilled);
+						btn.setBackground(originalBackground);
+						btn.setOpaque(originalOpaque);
+						btn.repaint();
+					}
+				});
+
+				// Remove existing key listeners if any
+				for (java.awt.event.KeyListener l : btn.getKeyListeners()) {
+					btn.removeKeyListener(l);
+				}
+
+				btn.addKeyListener(new java.awt.event.KeyAdapter() {
+					@Override
+					public void keyPressed(java.awt.event.KeyEvent e) {
+						int keyCode = e.getKeyCode();
+						if (keyCode == KeyEvent.VK_DOWN || keyCode == KeyEvent.VK_UP ||
+							keyCode == KeyEvent.VK_LEFT || keyCode == KeyEvent.VK_RIGHT) {
+							e.consume();
+							handleArrowKeyNavigation(btn, toolBar, keyCode);
+						} else if (keyCode == KeyEvent.VK_ENTER) {
+							e.consume();
+							btn.doClick();
+							c.focusMapView();
+						}
+					}
+
+					@Override
+					public void keyTyped(java.awt.event.KeyEvent e) {
+						if (e.isControlDown() || e.isAltDown() || e.isMetaDown()) {
+							return;
+						}
+						char c = e.getKeyChar();
+						if (c != java.awt.event.KeyEvent.CHAR_UNDEFINED && c != '\n' && c != '\t' && c != '\u001b') {
+							searchBox.requestFocusInWindow();
+							if (c == '\b') { // backspace
+								String text = searchBox.getText();
+								if (text.length() > 0) {
+									searchBox.setText(text.substring(0, text.length() - 1));
+								}
+							} else {
+								searchBox.setText(searchBox.getText() + c);
+							}
+							searchBox.setCaretPosition(searchBox.getText().length());
+							e.consume();
+						}
+					}
+				});
+			}
+		}
+	}
+
+	private java.util.List<AbstractButton> getVisibleButtons(JToolBar toolBar) {
+		java.util.List<AbstractButton> list = new java.util.ArrayList<>();
+		for (Component comp : toolBar.getComponents()) {
+			if (comp.isVisible() && comp instanceof AbstractButton) {
+				list.add((AbstractButton) comp);
+			}
+		}
+		return list;
+	}
+
+	private void handleArrowKeyNavigation(AbstractButton btn, JToolBar toolBar, int keyCode) {
+		java.util.List<AbstractButton> removeButtons = getVisibleButtons(removeToolBar);
+		java.util.List<AbstractButton> iconButtons = getVisibleButtons(iconToolBar);
+		
+		if (toolBar == removeToolBar) {
+			int index = removeButtons.indexOf(btn);
+			if (index == -1) return;
+			
+			if (keyCode == KeyEvent.VK_LEFT) {
+				if (index > 0) {
+					removeButtons.get(index - 1).requestFocusInWindow();
+				}
+			} else if (keyCode == KeyEvent.VK_RIGHT) {
+				if (index < removeButtons.size() - 1) {
+					removeButtons.get(index + 1).requestFocusInWindow();
+				}
+			} else if (keyCode == KeyEvent.VK_UP) {
+				focusSearchBox();
+			} else if (keyCode == KeyEvent.VK_DOWN) {
+				if (!iconButtons.isEmpty()) {
+					iconButtons.get(0).requestFocusInWindow();
+				}
+			}
+		} else if (toolBar == iconToolBar) {
+			int index = iconButtons.indexOf(btn);
+			if (index == -1) return;
+			
+			Component[] comps = iconToolBar.getComponents();
+			int fullIndex = java.util.Arrays.asList(comps).indexOf(btn);
+			if (fullIndex == -1) return;
+
+			String iconBarPosition = getController().getProperty(FreeMind.ICON_BAR_POSITION);
+			int cols = 1;
+			int rows = 1;
+			int totalCount = comps.length;
+			if ("top".equals(iconBarPosition)) {
+				rows = getController().getIntProperty(FreeMind.ICON_BAR_ROW_AMOUNT, 1);
+				cols = (totalCount + rows - 1) / rows;
+			} else {
+				cols = getController().getIntProperty(FreeMind.ICON_BAR_COLUMN_AMOUNT, 1);
+				rows = (totalCount + cols - 1) / cols;
+			}
+			if (cols < 1) cols = 1;
+			if (rows < 1) rows = 1;
+
+			if (keyCode == KeyEvent.VK_LEFT) {
+				if (isVisibleButton(comps, fullIndex - 1)) {
+					comps[fullIndex - 1].requestFocusInWindow();
+				} else {
+					if (index > 0) {
+						iconButtons.get(index - 1).requestFocusInWindow();
+					} else {
+						if (!removeButtons.isEmpty()) {
+							removeButtons.get(0).requestFocusInWindow();
+						} else {
+							focusSearchBox();
+						}
+					}
+				}
+			} else if (keyCode == KeyEvent.VK_RIGHT) {
+				if (isVisibleButton(comps, fullIndex + 1)) {
+					comps[fullIndex + 1].requestFocusInWindow();
+				} else {
+					if (index < iconButtons.size() - 1) {
+						iconButtons.get(index + 1).requestFocusInWindow();
+					}
+				}
+			} else if (keyCode == KeyEvent.VK_UP) {
+				int targetFullIndex = fullIndex - cols;
+				if (isVisibleButton(comps, targetFullIndex)) {
+					comps[targetFullIndex].requestFocusInWindow();
+				} else {
+					// Fallback to previous active icon
+					if (index > 0) {
+						iconButtons.get(index - 1).requestFocusInWindow();
+					} else {
+						if (!removeButtons.isEmpty()) {
+							removeButtons.get(0).requestFocusInWindow();
+						} else {
+							focusSearchBox();
+						}
+					}
+				}
+			} else if (keyCode == KeyEvent.VK_DOWN) {
+				int targetFullIndex = fullIndex + cols;
+				if (isVisibleButton(comps, targetFullIndex)) {
+					comps[targetFullIndex].requestFocusInWindow();
+				} else {
+					// Fallback to next active icon
+					if (index < iconButtons.size() - 1) {
+						iconButtons.get(index + 1).requestFocusInWindow();
+					}
+				}
+			}
+		}
+	}
+
+	private boolean isVisibleButton(Component[] comps, int idx) {
+		if (idx >= 0 && idx < comps.length) {
+			Component comp = comps[idx];
+			return comp.isVisible() && comp instanceof AbstractButton;
+		}
+		return false;
 	}
 
 	public JLabel addIcon(String iconPath) {
@@ -298,9 +551,19 @@ public class MindMapToolBar extends FreeMindToolBar implements ZoomListener {
 
 	Component getLeftToolBar() {
 		JPanel panel = new JPanel(new BorderLayout());
-		panel.add(removeToolBar, BorderLayout.NORTH);
+		JPanel topPanel = new JPanel(new BorderLayout());
+		topPanel.add(searchBox, BorderLayout.NORTH);
+		topPanel.add(removeToolBar, BorderLayout.CENTER);
+		panel.add(topPanel, BorderLayout.NORTH);
 		panel.add(iconToolBarScrollPane, BorderLayout.CENTER);
 		return panel;
+	}
+
+	public void focusSearchBox() {
+		if (searchBox != null) {
+			searchBox.requestFocusInWindow();
+			searchBox.selectAll();
+		}
 	}
 
 	public void selectFontName(String fontName) // (DiPo)

@@ -166,6 +166,10 @@ public class Tools {
 		return executableExtensions.contains(getExtension(file));
 	}
 
+	public static int getModifierMask() {
+		return java.awt.Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
+	}
+
 	public static String colorToXml(Color col) {
 		// if (col == null) throw new IllegalArgumentException("Color was
 		// null");

@@ -80,87 +80,27 @@ public class MenuBar extends JMenuBar {
 	JPopupMenu mapsPopupMenu;
 	Controller c;
 	ActionListener mapsMenuActionListener = new MapsMenuActionListener();
-	private JTextField iconSearchField;
 
 	public MenuBar(Controller controller) {
 		this.c = controller;
 		if (logger == null) {
 			logger = controller.getFrame().getLogger(this.getClass().getName());
 		}
-		initIconSearchField();
-		// Ctrl+L to focus search field
+		// Ctrl+L to focus search field on the icon toolbar
 		KeyStroke ctrlL = KeyStroke.getKeyStroke(KeyEvent.VK_L,
-				java.awt.event.InputEvent.CTRL_DOWN_MASK);
+				freemind.main.Tools.getModifierMask());
 		getInputMap(WHEN_IN_FOCUSED_WINDOW).put(ctrlL, "focusIconSearch");
 		getActionMap().put("focusIconSearch", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
-				iconSearchField.requestFocus();
+				ModeController mc = c.getModeController();
+				if (mc instanceof MindMapController) {
+					((MindMapController) mc).focusSearchBox();
+				}
 			}
 		});
 	}// Constructor
 
-	private void initIconSearchField() {
-		iconSearchField = new JTextField(15) {
-			@Override
-			protected void paintComponent(java.awt.Graphics g) {
-				super.paintComponent(g);
-				if (getText().isEmpty()) {
-					java.awt.Graphics2D g2 = (java.awt.Graphics2D) g;
-					g2.setColor(java.awt.Color.GRAY);
-					g2.setFont(getFont().deriveFont(java.awt.Font.PLAIN));
-					java.awt.FontMetrics fm = g2.getFontMetrics();
-					int x = getInsets().left + 2;
-					int y = (getHeight() + fm.getAscent() - fm.getDescent()) / 2;
-					g2.drawString("🔍 icons...", x, y);
-				}
-			}
-		};
-		iconSearchField.setToolTipText("Search icons (Ctrl+L / ↓)");
-		iconSearchField.setMaximumSize(new java.awt.Dimension(180, 30));
-		// Filter as you type
-		iconSearchField.getDocument().addDocumentListener(new DocumentListener() {
-			private void apply() {
-				ModeController mc = c.getModeController();
-				if (mc instanceof MindMapController) {
-					((MindMapController) mc).filterIcons(iconSearchField.getText());
-				}
-			}
-			public void insertUpdate(DocumentEvent e) { apply(); }
-			public void removeUpdate(DocumentEvent e) { apply(); }
-			public void changedUpdate(DocumentEvent e) { apply(); }
-		});
-		// KeyboardFocusManager catches DOWN and ESC before any component
-		java.awt.KeyboardFocusManager.getCurrentKeyboardFocusManager()
-				.addKeyEventDispatcher(new java.awt.KeyEventDispatcher() {
-					public boolean dispatchKeyEvent(KeyEvent e) {
-						if (e.getID() != KeyEvent.KEY_PRESSED) {
-							return false;
-						}
-						if (!iconSearchField.isFocusOwner()) {
-							return false;
-						}
-						if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-							ModeController mc = c.getModeController();
-							if (mc instanceof MindMapController) {
-								((MindMapController) mc).focusFirstVisibleIcon();
-								return true;
-							}
-						}
-						if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-							if (iconSearchField.getText().isEmpty()) {
-								ModeController mc = c.getModeController();
-								if (mc instanceof MindMapController) {
-									((MindMapController) mc).focusMapView();
-								}
-							} else {
-								iconSearchField.setText("");
-							}
-							return true;
-						}
-						return false;
-					}
-				});
-	}
+
 
 	/**
 	 * This is the only public method. It restores all menus.
@@ -272,13 +212,6 @@ public class MenuBar extends JMenuBar {
 		menuHolder.updateMenus(this, MENU_BAR_PREFIX);
 		menuHolder.updateMenus(mapsPopupMenu, GENERAL_POPUP_PREFIX);
 
-		this.add(Box.createHorizontalGlue());
-		this.add(iconSearchField);
-		// Re-apply filter after menu rebuild
-		String text = iconSearchField.getText();
-		if (!text.isEmpty() && newModeController instanceof MindMapController) {
-			((MindMapController) newModeController).filterIcons(text);
-		}
 	}
 
 	private void updateModeMenu() {

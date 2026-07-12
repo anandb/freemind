@@ -1283,6 +1283,10 @@ public class MindMapController extends ControllerAdapter implements
 		toolbar.focusFirstVisibleIcon();
 	}
 
+	public void focusSearchBox() {
+		toolbar.focusSearchBox();
+	}
+
 	public void focusMapView() {
 		if (getController().getView() != null) {
 			getController().getView().requestFocusInWindow();

@@ -21,6 +21,8 @@
 package freemind.main;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.Dimension;
@@ -71,6 +73,7 @@ import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -431,9 +434,15 @@ public class FreeMind extends JFrame implements FreeMindMain, ActionListener {
 			} else if (lookAndFeel.equals("metal")) {
 				UIManager
 						.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+			} else if (lookAndFeel.equals("javax.swing.plaf.nimbus.NimbusLookAndFeel")) {
+				UIManager
+						.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
 			} else if (lookAndFeel.equals("gtk")) {
 				UIManager
 						.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
+			} else if (lookAndFeel.equals("kunststoff")) {
+				UIManager
+						.setLookAndFeel("com.incors.plaf.kunststoff.KunststoffLookAndFeel");
 			} else if (lookAndFeel.equals("nothing")) {
 			} else if (lookAndFeel.indexOf('.') != -1) { // string contains a
 				// dot
@@ -449,6 +458,9 @@ public class FreeMind extends JFrame implements FreeMindMain, ActionListener {
 		} catch (Exception ex) {
 			System.err.println("Unable to set Look & Feel.");
 		}
+		// Set submenu popup delay. SynthMenuUI (Nimbus) reads "Menu.delay".
+		// BasicMenuUI (Metal/Windows) hardcodes 200, so set JMenu.delay directly.
+		UIManager.put("Menu.delay", 600);
 		mFreeMindCommon.loadUIProperties(defProps);
 	}
 
@@ -871,10 +883,25 @@ public class FreeMind extends JFrame implements FreeMindMain, ActionListener {
 		}
 	}
 
+	/**
+	 * Recursively sets submenu delay on all JMenu instances.
+	 * Needed because BasicMenuUI (Metal/Kunststoff) hardcodes 200.
+	 */
+	private void setMenuDelay(Container container, int delay) {
+		for (Component c : container.getComponents()) {
+			if (c instanceof JMenu) {
+				((JMenu) c).setDelay(delay);
+				setMenuDelay(((JMenu) c).getPopupMenu(), delay);
+			}
+		}
+	}
+
 	private void setScreenBounds() {
 		// Create the MenuBar
 		menuBar = new MenuBar(controller);
 		setJMenuBar(menuBar);
+		// Force submenu delay on all menus (BasicMenuUI hardcodes 200)
+		setMenuDelay(menuBar, 600);
 
 		// Create the scroll pane
 		mScrollPane = new MapView.ScrollPane();

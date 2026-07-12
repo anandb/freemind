@@ -23,6 +23,8 @@
 
 package freemind.modes.mindmapmode.actions;
 
+import java.awt.event.ActionEvent;
+
 import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.KeyStroke;
@@ -46,6 +48,12 @@ public class RemoveAllIconsAction extends NodeGeneralAction implements
 			IconAction addIconAction) {
 		super(modeController, "remove_all_icons", "images/icons8-recycle-bin-48.png");
 		setDoActionClass(RemoveAllIconsXmlAction.class);
+	}
+
+	@Override
+	public void xmlActionPerformed(ActionEvent e) {
+		super.xmlActionPerformed(e);
+		getMindMapController().focusMapView();
 	}
 
 

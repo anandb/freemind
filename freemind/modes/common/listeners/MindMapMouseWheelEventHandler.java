@@ -44,7 +44,7 @@ public class MindMapMouseWheelEventHandler implements MouseWheelListener {
 	private static final int HORIZONTAL_SCROLL_MASK = InputEvent.SHIFT_MASK
 			| InputEvent.BUTTON1_MASK | InputEvent.BUTTON2_MASK
 			| InputEvent.BUTTON3_MASK;
-	private static final int ZOOM_MASK = InputEvent.CTRL_MASK;
+	private static final int ZOOM_MASK = freemind.main.Tools.getModifierMask();
 	// |= oldX >=0 iff we are in the drag
 
 	private static java.util.logging.Logger logger = null;
