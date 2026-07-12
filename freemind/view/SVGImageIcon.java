@@ -47,10 +47,11 @@ public class SVGImageIcon extends ImageIcon {
             this.rootNode = builder.build(ctx, doc);
             this.bounds = rootNode.getPrimitiveBounds();
             
-            // Set size from configured property
+            // Set size from configured property, scaled by DPI for sharp rendering
             int targetSize = freemind.main.Resources.getInstance().getIntProperty(freemind.main.FreeMind.RESOURCES_TOOLBAR_ICON_SIZE, 32);
-            this.width = targetSize;
-            this.height = targetSize;
+            int dpiScaledSize = (int) (targetSize * freemind.main.Tools.getScalingFactor());
+            this.width = dpiScaledSize;
+            this.height = dpiScaledSize;
             
             renderImage();
         } catch (Exception e) {

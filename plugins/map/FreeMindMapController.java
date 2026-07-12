@@ -1871,7 +1871,7 @@ public class FreeMindMapController extends JMapController implements
 				// check for minimal drag distance:
 				Point currentPoint = new Point(e.getPoint());
 				correctPointByMapCenter(currentPoint);
-				if (mDragStartingPoint.distance(currentPoint) > MapMarkerLocation.CIRCLE_RADIUS) {
+				if (mDragStartingPoint.distance(currentPoint) > MapMarkerLocation.getCircleRadius()) {
 					ICoordinate mousePosition = coordinates;
 					mMapNodeMovingSource.changePosition(mousePosition,
 							map.getPosition(), map.getZoom(),

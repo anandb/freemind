@@ -1591,7 +1591,7 @@ public class MapView extends JPanel implements ViewAbstraction, Printable, Autos
 		this.siblingMaxLevel = level;
 	}
 
-	private static final int margin = 20;
+	private static final int BASE_MARGIN = 20;
 	private Timer mCenterNodeTimer;
 
 	/*
@@ -1600,12 +1600,13 @@ public class MapView extends JPanel implements ViewAbstraction, Printable, Autos
 	 * @see java.awt.dnd.Autoscroll#getAutoscrollInsets()
 	 */
 	public Insets getAutoscrollInsets() {
+		int scaledMargin = (int) (BASE_MARGIN * Tools.getScalingFactor());
 		Rectangle outer = getBounds();
 		Rectangle inner = getParent().getBounds();
-		return new Insets(inner.y - outer.y + margin, inner.x - outer.x
-				+ margin, outer.height - inner.height - inner.y + outer.y
-				+ margin, outer.width - inner.width - inner.x + outer.x
-				+ margin);
+		return new Insets(inner.y - outer.y + scaledMargin, inner.x - outer.x
+				+ scaledMargin, outer.height - inner.height - inner.y + outer.y
+				+ scaledMargin, outer.width - inner.width - inner.x + outer.x
+				+ scaledMargin);
 	}
 
 	/*
@@ -1614,9 +1615,10 @@ public class MapView extends JPanel implements ViewAbstraction, Printable, Autos
 	 * @see java.awt.dnd.Autoscroll#autoscroll(java.awt.Point)
 	 */
 	public void autoscroll(Point cursorLocn) {
-		Rectangle r = new Rectangle((int) cursorLocn.getX() - margin,
-				(int) cursorLocn.getY() - margin, 1 + 2 * margin,
-				1 + 2 * margin);
+		int scaledMargin = (int) (BASE_MARGIN * Tools.getScalingFactor());
+		Rectangle r = new Rectangle((int) cursorLocn.getX() - scaledMargin,
+				(int) cursorLocn.getY() - scaledMargin, 1 + 2 * scaledMargin,
+				1 + 2 * scaledMargin);
 		scrollRectToVisible(r);
 	}
 

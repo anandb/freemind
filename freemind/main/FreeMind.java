@@ -355,6 +355,10 @@ public class FreeMind extends JFrame implements FreeMindMain, ActionListener {
 	void init(FeedBack feedback) {
 		/* This is only for apple but does not harm for the others. */
 		System.setProperty("apple.laf.useScreenMenuBar", "true");
+		// Register macOS Apple event handlers (About, Quit, OpenFile)
+		if (Tools.isMacOsX()) {
+			setupMacHandlers();
+		}
 		patternsFile = new File(getFreemindDirectory(),
 				getDefaultProperty("patternsfile"));
 
@@ -462,6 +466,43 @@ public class FreeMind extends JFrame implements FreeMindMain, ActionListener {
 		// BasicMenuUI (Metal/Windows) hardcodes 200, so set JMenu.delay directly.
 		UIManager.put("Menu.delay", 600);
 		mFreeMindCommon.loadUIProperties(defProps);
+	}
+
+	/**
+	 * Register macOS Apple event handlers for About, Quit, and OpenFile.
+	 * On macOS, these events come from the system menu bar and dock, not
+	 * from Swing menu actions.
+	 */
+	private void setupMacHandlers() {
+		if (!Desktop.isDesktopSupported()) return;
+		Desktop desktop = Desktop.getDesktop();
+		if (desktop.isSupported(Desktop.Action.APP_ABOUT)) {
+			desktop.setAboutHandler(e -> {
+				controller.about.actionPerformed(
+						new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "about"));
+			});
+		}
+		if (desktop.isSupported(Desktop.Action.APP_QUIT_HANDLER)) {
+			desktop.setQuitHandler((e, response) -> {
+				controller.quit.actionPerformed(
+						new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "quit"));
+				response.performQuit();
+			});
+		}
+		if (desktop.isSupported(Desktop.Action.APP_OPEN_FILE)) {
+			desktop.setOpenFileHandler(e -> {
+				for (File f : e.getFiles()) {
+					if (f.getName().toLowerCase().endsWith(
+							FreeMindCommon.FREEMIND_FILE_EXTENSION)) {
+						try {
+							controller.getModeController().load(f);
+						} catch (Exception ex) {
+							Resources.getInstance().logException(ex);
+						}
+					}
+				}
+			});
+		}
 	}
 
 	public File getPatternsFile() {

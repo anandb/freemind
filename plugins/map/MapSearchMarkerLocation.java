@@ -74,10 +74,11 @@ public class MapSearchMarkerLocation extends MapMarkerBase {
 			Graphics2D g2 = (Graphics2D) pG;
 			Stroke oldStroke = g2.getStroke();
 			g2.setStroke(new BasicStroke(4));
-			int xo = pPosition.x - CIRCLE_RADIUS * CIRCLE_SELECTED_FACTOR;
-			int xu = pPosition.x + CIRCLE_RADIUS * CIRCLE_SELECTED_FACTOR;
-			int yo = pPosition.y - CIRCLE_RADIUS * CIRCLE_SELECTED_FACTOR;
-			int yu = pPosition.y + CIRCLE_RADIUS * CIRCLE_SELECTED_FACTOR;
+			int radius = getCircleRadius();
+			int xo = pPosition.x - radius * CIRCLE_SELECTED_FACTOR;
+			int xu = pPosition.x + radius * CIRCLE_SELECTED_FACTOR;
+			int yo = pPosition.y - radius * CIRCLE_SELECTED_FACTOR;
+			int yu = pPosition.y + radius * CIRCLE_SELECTED_FACTOR;
 			g2.drawLine(xo, yo, xu, yu);
 			g2.drawLine(xu, yo, xo, yu);
 			g2.setStroke(oldStroke);

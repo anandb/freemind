@@ -30,6 +30,8 @@ import java.util.Vector;
 
 import javax.swing.ImageIcon;
 
+import freemind.main.Tools;
+
 @SuppressWarnings("serial")
 public class MultipleImage extends ImageIcon {
 	private Vector<ImageIcon> mImages = new Vector<>();
@@ -62,18 +64,22 @@ public class MultipleImage extends ImageIcon {
 		if (w == 0 || h == 0) {
 			return null;
 		}
-		BufferedImage outImage = new BufferedImage(w, h,
+		// Render at DPI-scaled resolution for sharper icons on HiDPI displays
+		float dpiScale = Tools.getScalingFactor();
+		int scaledW = Math.max(1, (int)(w * dpiScale));
+		int scaledH = Math.max(1, (int)(h * dpiScale));
+		BufferedImage outImage = new BufferedImage(scaledW, scaledH,
 				BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = outImage.createGraphics();
 
-		int myHeight = getIconHeight();
+		int myHeight = scaledH;
 		for (ImageIcon currentIcon : mImages) {
-			double pwidth = (currentIcon.getIconWidth() * zoomFactor);
-			int py = (myHeight - (int) (currentIcon.getIconHeight() * zoomFactor)) / 2;
+			double pwidth = (currentIcon.getIconWidth() * zoomFactor * dpiScale);
+			int py = (myHeight - (int) (currentIcon.getIconHeight() * zoomFactor * dpiScale)) / 2;
 			
 			Graphics2D gTemp = (Graphics2D) g.create();
 			gTemp.translate(0, py);
-			gTemp.scale(zoomFactor, zoomFactor);
+			gTemp.scale(zoomFactor * dpiScale, zoomFactor * dpiScale);
 			currentIcon.paintIcon(null, gTemp, 0, 0);
 			gTemp.dispose();
 			
@@ -86,20 +92,21 @@ public class MultipleImage extends ImageIcon {
 	}
 
 	public void paintIcon(Component c, Graphics g, int x, int y) {
+		float dpiScale = Tools.getScalingFactor();
 		int myX = x;
 		int myHeight = getIconHeight();
 		for (int i = 0; i < mImages.size(); i++) {
 			ImageIcon currentIcon = mImages.get(i);
 			int px = myX;
-			int py = y + (myHeight - (int) (currentIcon.getIconHeight() * zoomFactor)) / 2;
+			int py = y + (myHeight - (int) (currentIcon.getIconHeight() * zoomFactor * dpiScale)) / 2;
 			
 			Graphics2D g2d = (Graphics2D) g.create();
 			g2d.translate(px, py);
-			g2d.scale(zoomFactor, zoomFactor);
+			g2d.scale(zoomFactor * dpiScale, zoomFactor * dpiScale);
 			currentIcon.paintIcon(c, g2d, 0, 0);
 			g2d.dispose();
 			
-			myX += (int) (currentIcon.getIconWidth() * zoomFactor);
+			myX += (int) (currentIcon.getIconWidth() * zoomFactor * dpiScale);
 		}
 	}
 

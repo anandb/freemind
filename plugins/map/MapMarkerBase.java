@@ -28,6 +28,8 @@ import java.awt.Stroke;
 
 import javax.swing.JLabel;
 
+import freemind.main.Tools;
+
 import org.openstreetmap.gui.jmapviewer.Coordinate;
 import org.openstreetmap.gui.jmapviewer.Layer;
 import org.openstreetmap.gui.jmapviewer.Style;
@@ -41,13 +43,13 @@ import org.openstreetmap.gui.jmapviewer.interfaces.MapMarker;
 public abstract class MapMarkerBase extends JLabel implements MapMarker {
 
 	/**
-	 * 
+	 * Returns the circle radius, scaled by display DPI factor.
 	 */
-	public static final int CIRCLE_RADIUS = 5;
-	/**
-	 * 
-	 */
-	private static final int CIRCLE_DIAMETER = CIRCLE_RADIUS * 2;
+	public static int getCircleRadius() {
+		return (int) (5 * Tools.getScalingFactor());
+	}
+
+	private static final int CIRCLE_DIAMETER = 10;
 	protected MapDialog mMapDialog;
 	boolean mSelected = false;
 	protected static java.util.logging.Logger logger = null;
@@ -106,18 +108,20 @@ public abstract class MapMarkerBase extends JLabel implements MapMarker {
 	}
 
 	protected void paintCenter(Graphics g, Point position) {
+		int radius = getCircleRadius();
 		g.setColor(mBulletColor);
-		g.fillOval(position.x - CIRCLE_RADIUS, position.y - CIRCLE_RADIUS,
-				CIRCLE_DIAMETER, CIRCLE_DIAMETER);
+		g.fillOval(position.x - radius, position.y - radius,
+				radius * 2, radius * 2);
 		g.setColor(getForeground());
-		g.drawOval(position.x - CIRCLE_RADIUS, position.y - CIRCLE_RADIUS,
-				CIRCLE_DIAMETER, CIRCLE_DIAMETER);
+		g.drawOval(position.x - radius, position.y - radius,
+				radius * 2, radius * 2);
 	}
 
 	public static Point adjustToTextfieldLocation(Point position) {
+		int radius = getCircleRadius();
 		Point newPoint = new Point(position);
-		newPoint.x = newPoint.x + CIRCLE_RADIUS;
-		newPoint.y = newPoint.y - CIRCLE_RADIUS;
+		newPoint.x = newPoint.x + radius;
+		newPoint.y = newPoint.y - radius;
 		return newPoint;
 	}
 
@@ -128,15 +132,16 @@ public abstract class MapMarkerBase extends JLabel implements MapMarker {
 	 *         0,0 is likely a hit...).
 	 */
 	public boolean checkHit(int pX, int pY) {
+		int radius = getCircleRadius();
 		int x = pX;
 		int y = pY;
 		// translation:
-		x -= CIRCLE_RADIUS;
-		y += CIRCLE_RADIUS;
+		x -= radius;
+		y += radius;
 		if (x >= 0 && y >= 0 && x <= getWidth() && y <= getHeight())
 			return true;
 		// distance to zero less than radius:
-		return (pX * pX + pY * pY) <= CIRCLE_RADIUS * CIRCLE_RADIUS;
+		return (pX * pX + pY * pY) <= radius * radius;
 	}
 
 	/**
@@ -193,7 +198,7 @@ public abstract class MapMarkerBase extends JLabel implements MapMarker {
 
 	@Override
 	public double getRadius() {
-		return CIRCLE_RADIUS;
+		return getCircleRadius();
 	}
 
 	@Override
