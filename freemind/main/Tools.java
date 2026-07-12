@@ -1509,12 +1509,9 @@ public class Tools {
 	}
 
 	public static boolean isMacOsX() {
-		boolean underMac = false;
 		String osName = System.getProperty("os.name");
-		if (osName.startsWith("Mac OS")) {
-			underMac = true;
-		}
-		return underMac;
+		// macOS 11+ returns "macOS 14.x"; older versions return "Mac OS X"
+		return osName.startsWith("Mac OS") || osName.toLowerCase().startsWith("macos");
 	}
 
 	public static boolean isLinux() {

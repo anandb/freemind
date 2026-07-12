@@ -428,9 +428,9 @@ public class FreeMind extends JFrame implements FreeMindMain, ActionListener {
 			} else if (lookAndFeel.equals("motif")) {
 				UIManager
 						.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
-			} else if (lookAndFeel.equals("mac")) {
-				// Only available on macOS
-				UIManager.setLookAndFeel("javax.swing.plaf.mac.MacLookAndFeel");
+		} else if (lookAndFeel.equals("mac")) {
+			// MacLookAndFeel was removed from JDK 9+; use system L&F (Aqua on macOS)
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			} else if (lookAndFeel.equals("metal")) {
 				UIManager
 						.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");

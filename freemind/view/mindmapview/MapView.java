@@ -62,6 +62,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 
 import freemind.controller.Controller;
 import freemind.controller.NodeKeyListener;
@@ -559,8 +560,16 @@ public class MapView extends JPanel implements ViewAbstraction, Printable, Autos
 	 * calculated, the second time the scrollPane is actually scrolled.
 	 */
 	public void centerNode(final NodeView node) {
+		// Dispatch to EDT — this may be called from java.util.Timer thread
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					centerNode(node);
+				}
+			});
+			return;
+		}
 		// FIXME: Correct the resize map behaviour.
-		Tools.waitForEventQueue();
 		if (!isValid()) {
 			mCenterNodeTimer.schedule(new CheckLaterForCenterNodeTask(node),
 					100);

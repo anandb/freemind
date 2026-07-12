@@ -281,7 +281,9 @@ public class NodeFoldingComponent extends JButton {
 
 		private void initShape(JComponent c) {
 			if (!c.getBounds().equals(base)) {
-				Dimension s = c.getPreferredSize();
+				// Use actual component size, not preferred size, to ensure
+				// shape coordinates match mouse event coordinates on HiDPI
+				Dimension s = c.getSize();
 				base = c.getBounds();
 				shape = new Ellipse2D.Float(0, 0, s.width - 1, s.height - 1);
 			}

@@ -23,6 +23,7 @@
 
 package freemind.view.mindmapview;
 
+import java.awt.EventQueue;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileWriter;
@@ -81,12 +82,18 @@ public class EditNodeExternalApplication extends EditNodeBase {
 					// versions of FrontPage,
 					// and with Vim though.
 
-					// c. Get the text from the temporary file
-					String content = Tools.getFile(temporaryFile);
-					if (content == null) {
-						getEditControl().cancel();
+				// c. Get the text from the temporary file
+				String content = Tools.getFile(temporaryFile);
+				// Dispatch Swing callbacks to EDT — ok/cancel modify model + UI
+				final String result = content;
+				EventQueue.invokeLater(new Runnable() {
+					public void run() {
+						if (result == null) {
+							getEditControl().cancel();
+						}
+						getEditControl().ok(result);
 					}
-					getEditControl().ok(content);
+				});
 				} catch (Exception e) {
 					freemind.main.Resources.getInstance().logException(e);
 					try {
