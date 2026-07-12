@@ -118,7 +118,41 @@ public class MindIcon implements Comparable<MindIcon>, IconInformation {
 	}
 
 	public String getDescription() {
-		String resource = new String("icon_" + getName());
+		String full = getFullDescription();
+		int semi = full.indexOf(';');
+		if (semi >= 0) {
+			return full.substring(0, semi).trim();
+		}
+		return full;
+	}
+
+	/**
+	 * Returns comma-separated tags after the semicolon in the description,
+	 * with each tag trimmed. E.g. for "icon_idea = Idea;  creative , thought"
+	 * returns "creative, thought".
+	 */
+	public String getTags() {
+		String full = getFullDescription();
+		int semi = full.indexOf(';');
+		if (semi < 0) {
+			return "";
+		}
+		StringBuilder result = new StringBuilder();
+		String[] parts = full.substring(semi + 1).split(",");
+		for (int i = 0; i < parts.length; i++) {
+			String trimmed = parts[i].trim();
+			if (!trimmed.isEmpty()) {
+				if (result.length() > 0) {
+					result.append(", ");
+				}
+				result.append(trimmed);
+			}
+		}
+		return result.toString();
+	}
+
+	private String getFullDescription() {
+		String resource = "icon_" + getName();
 		return Resources.getInstance().getResourceString(resource, resource);
 	}
 

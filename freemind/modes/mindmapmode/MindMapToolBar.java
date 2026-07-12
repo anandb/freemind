@@ -39,6 +39,7 @@ import javax.swing.JToolBar;
 import freemind.controller.Controller;
 import freemind.controller.FreeMindToolBar;
 import freemind.modes.mindmapmode.actions.IconAction;
+import freemind.modes.MindIcon;
 import freemind.controller.StructuredMenuHolder;
 import freemind.controller.ZoomListener;
 import freemind.controller.color.ColorPair;
@@ -622,12 +623,16 @@ public class MindMapToolBar extends FreeMindToolBar implements ZoomListener {
 				String desc = btn.getToolTipText();
 				// Also match against icon file name (e.g. "help", "hourglass")
 				String iconName = null;
+				String tags = null;
 				if (btn.getAction() instanceof IconAction) {
-					iconName = ((IconAction) btn.getAction()).getMindIcon().getName();
+					MindIcon mindIcon = ((IconAction) btn.getAction()).getMindIcon();
+					iconName = mindIcon.getName();
+					tags = mindIcon.getTags();
 				}
 				boolean match = emptySearch
 						|| (desc != null && desc.toLowerCase().contains(lowerSearch))
-						|| (iconName != null && iconName.contains(lowerSearch));
+						|| (iconName != null && iconName.contains(lowerSearch))
+						|| (tags != null && tags.toLowerCase().contains(lowerSearch));
 				comps[i].setVisible(match);
 			}
 		}
