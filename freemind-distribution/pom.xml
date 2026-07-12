@@ -11,9 +11,9 @@
     </parent>
 
     <artifactId>freemind-distribution</artifactId>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
     <name>FreeMind Distribution</name>
-    <description>Uberjar assembly for FreeMind</description>
+    <description>All-inclusive executable FreeMind uberjar</description>
 
     <dependencies>
         <!-- Core -->
@@ -33,23 +33,129 @@
 
     <build>
         <plugins>
-            <!-- Call Ant uberjar target -->
+            <!-- Skip Java compilation (all code comes from dependencies) -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>default-compile</id>
+                        <phase>none</phase>
+                    </execution>
+                    <execution>
+                        <id>default-testCompile</id>
+                        <phase>none</phase>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Shade: create all-inclusive executable uberjar -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
                 <executions>
                     <execution>
                         <id>uberjar</id>
                         <phase>package</phase>
                         <goals>
-                            <goal>run</goal>
+                            <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <target>
-                                <ant antfile="${project.basedir}/../fm-build.xml" target="uberjar" dir="${project.basedir}/.."/>
-                            </target>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <finalName>freemind-all</finalName>
+                            <outputDirectory>${project.basedir}/../target/dist</outputDirectory>
+                            <shadedArtifactAttached>false</shadedArtifactAttached>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>freemind.main.FreeMindStarter</mainClass>
+                                </transformer>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ApacheNoticeResourceTransformer"/>
+                            </transformers>
+                            <filters>
+                                <!-- Global: remove signing + module-info -->
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                        <exclude>module-info.class</exclude>
+                                    </excludes>
+                                </filter>
+                                <!-- pdf-transcoder is a custom vendored FOP derivative.
+                                     Its classes must win over originals. -->
+                                <filter>
+                                    <artifact>org.apache.xmlgraphics:fop</artifact>
+                                    <excludes>
+                                        <exclude>org/apache/fop/**</exclude>
+                                    </excludes>
+                                </filter>
+                                <!-- pdf-transcoder has vendored copies of specific xmlgraphics packages -->
+                                <filter>
+                                    <artifact>org.apache.xmlgraphics:xmlgraphics-commons</artifact>
+                                    <excludes>
+                                        <exclude>org/apache/xmlgraphics/fonts/**</exclude>
+                                        <exclude>org/apache/xmlgraphics/java2d/**</exclude>
+                                        <exclude>org/apache/xmlgraphics/ps/**</exclude>
+                                        <exclude>org/apache/xmlgraphics/util/io/**</exclude>
+                                    </excludes>
+                                </filter>
+                                <filter>
+                                    <artifact>org.apache.avalon.framework:avalon-framework-api</artifact>
+                                    <excludes>
+                                        <exclude>org/apache/avalon/framework/**</exclude>
+                                    </excludes>
+                                </filter>
+                                <filter>
+                                    <artifact>org.apache.avalon.framework:avalon-framework-impl</artifact>
+                                    <excludes>
+                                        <exclude>org/apache/avalon/framework/**</exclude>
+                                    </excludes>
+                                </filter>
+                                <filter>
+                                    <artifact>commons-io:commons-io</artifact>
+                                    <excludes>
+                                        <exclude>org/apache/commons/io/**</exclude>
+                                    </excludes>
+                                </filter>
+                                <filter>
+                                    <artifact>commons-logging:commons-logging</artifact>
+                                    <excludes>
+                                        <exclude>org/apache/commons/logging/**</exclude>
+                                    </excludes>
+                                </filter>
+                                <!-- batik-js bundles Rhino; standalone rhino wins -->
+                                <filter>
+                                    <artifact>org.apache.xmlgraphics:batik-js</artifact>
+                                    <excludes>
+                                        <exclude>org/mozilla/**</exclude>
+                                    </excludes>
+                                </filter>
+                                <!-- batik-ext overlaps w3c DOM classes with xml-apis; xml-apis wins -->
+                                <filter>
+                                    <artifact>org.apache.xmlgraphics:batik-ext</artifact>
+                                    <excludes>
+                                        <exclude>org/w3c/dom/**</exclude>
+                                    </excludes>
+                                </filter>
+                                <!-- QName is JDK-provided; exclude from xpp3 to avoid xml-apis overlap -->
+                                <filter>
+                                    <artifact>xpp3:xpp3</artifact>
+                                    <excludes>
+                                        <exclude>javax/xml/namespace/QName*</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
                         </configuration>
                     </execution>
+                </executions>
+            </plugin>
+
+            <!-- Make executable wrapper script (post-package) -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
                     <execution>
                         <id>make-executable</id>
                         <phase>package</phase>

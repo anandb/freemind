@@ -90,10 +90,6 @@
         </dependency>
         <dependency>
             <groupId>org.apache.xmlgraphics</groupId>
-            <artifactId>batik-script</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.xmlgraphics</groupId>
             <artifactId>batik-svg-dom</artifactId>
         </dependency>
         <dependency>
@@ -144,12 +140,6 @@
             <artifactId>jortho</artifactId>
             <version>1.0</version>
         </dependency>
-        <dependency>
-            <groupId>com.formdev</groupId>
-            <artifactId>flatlaf</artifactId>
-            <version>3.5.4</version>
-        </dependency>
-
         <!-- Test -->
         <dependency>
             <groupId>junit</groupId>
@@ -167,7 +157,7 @@
         <testSourceDirectory>${project.basedir}/../tests</testSourceDirectory>
 
         <resources>
-            <!-- Default src/main/resources (for FlatLaf.properties, etc.) -->
+            <!-- Default src/main/resources -->
             <resource>
                 <directory>src/main/resources</directory>
             </resource>
@@ -244,6 +234,17 @@
         </testResources>
 
         <plugins>
+            <!-- Exclude tests/ from main compilation (sourceDirectory = .) -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>tests/**</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+
             <!-- Add additional source directories -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>

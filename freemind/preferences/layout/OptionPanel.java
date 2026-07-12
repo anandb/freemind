@@ -684,14 +684,8 @@ public class OptionPanel implements TextTranslator {
 		translatedLafNames.add(getText("gtk"));
 		lafNames[5] = "nothing";
 		translatedLafNames.add(getText("nothing"));
-		lafNames[6] = "com.formdev.flatlaf.FlatLightLaf";
-		translatedLafNames.add("FlatLaf Light");
-		lafNames[7] = "com.formdev.flatlaf.FlatDarkLaf";
-		translatedLafNames.add("FlatLaf Dark");
-		lafNames[8] = "com.formdev.flatlaf.FlatIntelliJLaf";
-		translatedLafNames.add("FlatLaf IntelliJ");
-		lafNames[9] = "com.formdev.flatlaf.FlatDarculaLaf";
-		translatedLafNames.add("FlatLaf Darcula");
+		lafNames[6] = "javax.swing.plaf.nimbus.NimbusLookAndFeel";
+		translatedLafNames.add("Nimbus");
 		for (int i = 0; i < lafInfo.length; i++) {
 			LookAndFeelInfo info = lafInfo[i];
 			String className = info.getClassName();
@@ -1169,8 +1163,6 @@ public class OptionPanel implements TextTranslator {
 		controls.add(new KeyProperty(frame, null,
 				"keystroke_show_attribute_manager")); // control
 		controls.add(new KeyProperty(frame, null, "keystroke_assign_attributes")); // control
-		controls.add(new KeyProperty(frame, null,
-				"keystroke_plugins/ScriptingEngine.keystroke.evaluate"));
 
 		final ModeController modeController = fmMain.getController()
 				.getModeController();
@@ -1256,9 +1248,6 @@ public class OptionPanel implements TextTranslator {
 		controls.add(new RemindValueProperty(
 				FreeMind.RESOURCES_COMPLETE_CLONING + ".tooltip",
 				FreeMind.RESOURCES_COMPLETE_CLONING, modeController));
-		controls.add(new DontShowNotificationProperty(
-				"execute_scripts_without_asking.tooltip",
-				FreeMind.RESOURCES_EXECUTE_SCRIPTS_WITHOUT_ASKING));
 
 		controls.add(new NextLineProperty());
 		controls.add(new SeparatorProperty(FreeMind.RESOURCES_SELECTION_METHOD));

@@ -3417,58 +3417,6 @@ c.registerNodeSelectionListener(newListener);</pre>
 <edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
 <font NAME="SansSerif" SIZE="12"/>
 </node>
-<node COLOR="#407000" CREATED="1204696614656" ID="ID_1588262906" MODIFIED="1229414646104" STYLE="fork" TEXT="How to install a script as a menu item">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      Once, you've created or found some interesting scripts, you probably want to get a FreeMind menu item with an own shortcut to execute the script.
-    </p>
-    <p>
-      To do this, save the script to a file and edit &quot;ScriptingEngine.xml&quot; inside the FreeMind script directory inside your installation.
-    </p>
-    <p>
-      You'll find a template for a script action that is commented out (ie. surrounded by &lt;!-- ... --&gt;). Uncomment the template and fill out the following bold places:
-    </p>
-    <pre>      &lt;plugin_action
-      name=&quot;<b>GroovyGroovy</b>&quot;
-      documentation=&quot;<b>this is my first installed groovy script.</b>&quot;
-      label=&quot;<b>plugins/GroovyScript1</b>&quot;
-      base=&quot;freemind.extensions.ModeControllerHookAdapter&quot;
-      class_name=&quot;plugins.script.ScriptingEngine&quot;&gt;
-      &lt;plugin_mode class_name=&quot;freemind.modes.mindmapmode&quot;/&gt;
-      &lt;plugin_menu location=&quot;<b>menu_bar/extras/first/scripting/groovy1</b>&quot;/&gt;
-      &lt;plugin_property name=&quot;ScriptLocation&quot; value=&quot;<b>/home/foltin/test.groovy</b>&quot;/&gt;
-      &lt;/plugin_action&gt;
-    </pre>
-    <p>
-      The most important change is the location of the script. Moreover, if you have several scripts you want to install, the labels and the menu_location must be unique.
-    </p>
-    <p>
-      If you now restart FreeMind you get a new menu item (in this example in the &quot;Extras&quot; menu) that carries out your script. Observe, that the &quot;node&quot; variable points to the root node.
-    </p>
-    <p>
-      If you want to have a keyboard short cut for the new script, you have to add the bold line into the entry in ScriptingEngine.xml like:
-    </p>
-    <pre>      &lt;plugin_action
-      name=&quot;GroovyGroovy&quot;
-      documentation=&quot;this is my first installed groovy script.&quot;
-      label=&quot;plugins/GroovyScript1&quot;
-      <b>key_stroke=&quot;control shift M&quot; </b>
-      base=&quot;freemind.extensions.ModeControllerHookAdapter&quot;
-      class_name=&quot;plugins.script.ScriptingEngine&quot;&gt;
-      &lt;plugin_mode class_name=&quot;freemind.modes.mindmapmode&quot;/&gt;
-      &lt;plugin_menu location=&quot;menu_bar/extras/first/scripting/groovy1&quot;/&gt;
-      &lt;plugin_property name=&quot;ScriptLocation&quot; value=&quot;/home/foltin/test.groovy&quot;/&gt;
-      &lt;/plugin_action&gt;
-    </pre>
-  </body>
-</html></richcontent>
-<edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
-<font NAME="SansSerif" SIZE="12"/>
-</node>
 </node>
 </node>
 </node>

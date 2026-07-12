@@ -44,7 +44,6 @@ import freemind.common.IconProperty;
 import freemind.common.NextLineProperty;
 import freemind.common.PropertyBean;
 import freemind.common.PropertyControl;
-import freemind.common.ScriptEditorProperty;
 import freemind.common.SeparatorProperty;
 import freemind.common.StringProperty;
 import freemind.common.TextTranslator;
@@ -65,7 +64,6 @@ import freemind.controller.actions.generated.instance.PatternNodeFontStrikethrou
 import freemind.controller.actions.generated.instance.PatternNodeStyle;
 import freemind.controller.actions.generated.instance.PatternNodeText;
 import freemind.controller.actions.generated.instance.PatternPropertyBase;
-import freemind.controller.actions.generated.instance.PatternScript;
 import freemind.main.FreeMind;
 import freemind.main.Tools;
 import freemind.modes.EdgeAdapter;
@@ -163,10 +161,6 @@ public class StylePatternFrame extends JPanel implements TextTranslator,
 
 	private static final String CHILD_PATTERN = "childpattern";
 
-	private static final String SET_SCRIPT = "setscript";
-
-	private static final String SCRIPT = "script";
-
 	private final TextTranslator mTranslator;
 
 	private Vector<PropertyControl> mControls;
@@ -226,10 +220,6 @@ public class StylePatternFrame extends JPanel implements TextTranslator,
 	private ThreeCheckBoxProperty mSetChildPattern;
 
 	private ComboProperty mChildPattern;
-
-	private ThreeCheckBoxProperty mSetScriptPattern;
-
-	private ScriptEditorProperty mScriptPattern;
 
 	private StringProperty mName;
 
@@ -422,14 +412,6 @@ public class StylePatternFrame extends JPanel implements TextTranslator,
 		mEdgeColor = new ColorProperty(EDGE_COLOR + ".tooltip", EDGE_COLOR,
 				fmMain.getDefaultProperty(FreeMind.RESOURCES_EDGE_COLOR), this);
 		controls.add(mEdgeColor);
-		/* **** */
-		controls.add(new SeparatorProperty("ScriptingControl"));
-		mSetScriptPattern = new ThreeCheckBoxProperty(SET_SCRIPT + ".tooltip",
-				SET_SCRIPT);
-		controls.add(mSetScriptPattern);
-		mScriptPattern = new ScriptEditorProperty(SCRIPT + ".tooltip", SCRIPT,
-				mMindMapController);
-		controls.add(mScriptPattern);
 		// fill map;
 		mPropertyChangePropagation.put(mSetNodeColor, mNodeColor);
 		mPropertyChangePropagation.put(mSetNodeBackgroundColor,
@@ -445,7 +427,6 @@ public class StylePatternFrame extends JPanel implements TextTranslator,
 		mPropertyChangePropagation.put(mSetEdgeStyle, mEdgeStyle);
 		mPropertyChangePropagation.put(mSetEdgeWidth, mEdgeWidth);
 		mPropertyChangePropagation.put(mSetIcon, mIcon);
-		mPropertyChangePropagation.put(mSetScriptPattern, mScriptPattern);
 		if (StylePatternFrameType.WITH_NAME_AND_CHILDS.equals(mType)) {
 			// child pattern
 			mPropertyChangePropagation.put(mSetChildPattern, mChildPattern);
@@ -498,8 +479,6 @@ public class StylePatternFrame extends JPanel implements TextTranslator,
 		MindIcon firstInfo = (MindIcon) mIconInformationVector.get(0);
 		setPatternControls(pattern.getPatternIcon(), mSetIcon, mIcon,
 				firstInfo.getName());
-		setPatternControls(pattern.getPatternScript(), mSetScriptPattern,
-				mScriptPattern, "");
 		if (StylePatternFrameType.WITH_NAME_AND_CHILDS.equals(mType)) {
 			mName.setValue(pattern.getName());
 			setPatternControls(
@@ -638,8 +617,6 @@ public class StylePatternFrame extends JPanel implements TextTranslator,
 				mNodeFontItalic));
 		pattern.setPatternIcon((PatternIcon) getPatternResult(
 				new PatternIcon(), mSetIcon, mIcon));
-		pattern.setPatternScript((PatternScript) getPatternResult(
-				new PatternScript(), mSetScriptPattern, mScriptPattern));
 		if (StylePatternFrameType.WITH_NAME_AND_CHILDS.equals(mType)) {
 			pattern.setName(mName.getValue());
 			pattern.setPatternChild((PatternChild) getPatternResult(

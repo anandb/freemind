@@ -12,7 +12,7 @@
 
     <artifactId>freemind-plugins</artifactId>
     <name>FreeMind Plugins</name>
-    <description>Active FreeMind plugins (svg, socket, help, map, script)</description>
+    <description>Active FreeMind plugins (svg, socket, help, map)</description>
 
     <dependencies>
         <!-- Core (for classpath) -->
@@ -65,10 +65,6 @@
         </dependency>
         <dependency>
             <groupId>org.apache.xmlgraphics</groupId>
-            <artifactId>batik-script</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.xmlgraphics</groupId>
             <artifactId>batik-svg-dom</artifactId>
         </dependency>
         <dependency>
@@ -104,14 +100,6 @@
             <groupId>freemind</groupId>
             <artifactId>JMapViewer</artifactId>
             <version>1.0</version>
-        </dependency>
-
-        <!-- Script Plugin dependencies -->
-        <dependency>
-            <groupId>org.apache.groovy</groupId>
-            <artifactId>groovy-all</artifactId>
-            <version>4.0.24</version>
-            <type>pom</type>
         </dependency>
 
         <!-- SVG Plugin system-scope dependencies -->
@@ -153,7 +141,6 @@
                                 <source>${project.basedir}/../plugins/collaboration/socket</source>
                                 <source>${project.basedir}/../plugins/help</source>
                                 <source>${project.basedir}/../plugins/map</source>
-                                <source>${project.basedir}/../plugins/script</source>
                             </sources>
                         </configuration>
                     </execution>
@@ -181,7 +168,6 @@
                                         <include>plugins/CollaborationSocket.xml</include>
                                         <include>plugins/FreemindHelp.xml</include>
                                         <include>plugins/MapViewer.xml</include>
-                                        <include>plugins/ScriptingEngine.xml</include>
                                     </includes>
                                 </resource>
                             </resources>

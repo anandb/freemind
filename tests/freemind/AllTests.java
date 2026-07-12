@@ -32,12 +32,10 @@ import tests.freemind.findreplace.FindTextTests;
  */
 @RunWith(Suite.class)
 @SuiteClasses({
-	ScriptEditorPanelTest.class,
 	Base64Tests.class,
 	FindTextTests.class,
 	HtmlConversionTests.class,
 	MarshallerTests.class,
-	SignedScriptTests.class,
 	LastStorageManagementTests.class,
 	ToolsTests.class,
 	ExportTests.class,

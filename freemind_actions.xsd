@@ -1147,19 +1147,6 @@
 		</xs:complexContent>
 	  </xs:complexType>
 	</xs:element>
-	
-	<!-- Script Editor settings: -->
-	<xs:element name="script_editor_window_configuration_storage">
-	  <xs:complexType>
-		<xs:complexContent>
-			<xs:extension base="window_configuration_storage">
-				<xs:attribute use="optional" name="left_ratio" type="xs:int"/>
-				<xs:attribute use="optional" name="top_ratio"  type="xs:int"/>
-			</xs:extension>
-		</xs:complexContent>
-	  </xs:complexType>
-	</xs:element>
-
 	<!-- Manage Style Editor settings: -->
 	<xs:element name="manage_style_editor_window_configuration_storage">
 	  <xs:complexType>
@@ -1225,7 +1212,6 @@
     <xs:element name="pattern_edge_style">             <xs:complexType><xs:complexContent><xs:extension base="pattern_property_base"></xs:extension></xs:complexContent></xs:complexType>  </xs:element>
     <xs:element name="pattern_edge_width">             <xs:complexType><xs:complexContent><xs:extension base="pattern_property_base"></xs:extension></xs:complexContent></xs:complexType>  </xs:element>
     <xs:element name="pattern_child">                  <xs:complexType><xs:complexContent><xs:extension base="pattern_property_base"></xs:extension></xs:complexContent></xs:complexType>  </xs:element>
-    <xs:element name="pattern_script">                 <xs:complexType><xs:complexContent><xs:extension base="pattern_property_base"></xs:extension></xs:complexContent></xs:complexType>  </xs:element>
 
 	<xs:element name="pattern">
 		<xs:complexType>
@@ -1246,7 +1232,6 @@
 						<xs:element minOccurs="0" maxOccurs="1" ref="pattern_edge_style"/>
 						<xs:element minOccurs="0" maxOccurs="1" ref="pattern_edge_width"/>
 						<xs:element minOccurs="0" maxOccurs="1" ref="pattern_child"/>
-						<xs:element minOccurs="0" maxOccurs="1" ref="pattern_script"/>
 					</xs:choice>
 				    <xs:attribute name="name" use="optional" type="xs:string"/>
 				    <!-- Used to store the not-translated name at FreeMind runtime -->

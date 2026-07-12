@@ -1842,58 +1842,6 @@ c.registerNodeSelectionListener(newListener);</pre>
 <edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
 <font NAME="SansSerif" SIZE="12"/>
 </node>
-<node COLOR="#407000" CREATED="1204696614656" ID="ID_491680673" MODIFIED="1229414646104" STYLE="fork" TEXT="How to install a script as a menu item">
-<richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
-  <body>
-    <p>
-      Once, you've created or found some interesting scripts, you probably want to get a FreeMind menu item with an own shortcut to execute the script.
-    </p>
-    <p>
-      To do this, save the script to a file and edit "ScriptingEngine.xml" inside the FreeMind script directory inside your installation.
-    </p>
-    <p>
-      You'll find a template for a script action that is commented out (ie. surrounded by &lt;!-- ... --&gt;). Uncomment the template and fill out the following bold places:
-    </p>
-    <pre>      &lt;plugin_action
-      name="<b>GroovyGroovy</b>"
-      documentation="<b>this is my first installed groovy script.</b>"
-      label="<b>plugins/GroovyScript1</b>"
-      base="freemind.extensions.ModeControllerHookAdapter"
-      class_name="plugins.script.ScriptingEngine"&gt;
-      &lt;plugin_mode class_name="freemind.modes.mindmapmode"/&gt;
-      &lt;plugin_menu location="<b>menu_bar/extras/first/scripting/groovy1</b>"/&gt;
-      &lt;plugin_property name="ScriptLocation" value="<b>/home/foltin/test.groovy</b>"/&gt;
-      &lt;/plugin_action&gt;
-    </pre>
-    <p>
-      The most important change is the location of the script. Moreover, if you have several scripts you want to install, the labels and the menu_location must be unique.
-    </p>
-    <p>
-      If you now restart FreeMind you get a new menu item (in this example in the "Extras" menu) that carries out your script. Observe, that the "node" variable points to the root node.
-    </p>
-    <p>
-      If you want to have a keyboard short cut for the new script, you have to add the bold line into the entry in ScriptingEngine.xml like:
-    </p>
-    <pre>      &lt;plugin_action
-      name="GroovyGroovy"
-      documentation="this is my first installed groovy script."
-      label="plugins/GroovyScript1"
-      <b>key_stroke="control shift M" </b>
-      base="freemind.extensions.ModeControllerHookAdapter"
-      class_name="plugins.script.ScriptingEngine"&gt;
-      &lt;plugin_mode class_name="freemind.modes.mindmapmode"/&gt;
-      &lt;plugin_menu location="menu_bar/extras/first/scripting/groovy1"/&gt;
-      &lt;plugin_property name="ScriptLocation" value="/home/foltin/test.groovy"/&gt;
-      &lt;/plugin_action&gt;
-    </pre>
-  </body>
-</html></richcontent>
-<edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
-<font NAME="SansSerif" SIZE="12"/>
-</node>
 </node>
 </node>
 <node COLOR="#407000" CREATED="1354041409110" FOLDED="true" ID="ID_1185769793" LINK="http://freemind.sourceforge.net/wiki/index.php/FreeMind_1.0.0:_The_New_Features" MODIFIED="1381609476303" POSITION="right" STYLE="fork" TEXT="New features in version 1.0.0">

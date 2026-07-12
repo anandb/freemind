@@ -32,7 +32,6 @@
         <xerces.version>2.9.0</xerces.version>
         <xml-apis.version>1.4.01</xml-apis.version>
         <batik.version>1.7</batik.version>
-        <groovy.version>2.1.8</groovy.version>
         <lucene.version>4.6.0</lucene.version>
         <hsqldb.version>2.3.2</hsqldb.version>
         <junit.version>4.13.2</junit.version>
@@ -160,11 +159,6 @@
             </dependency>
             <dependency>
                 <groupId>org.apache.xmlgraphics</groupId>
-                <artifactId>batik-script</artifactId>
-                <version>${batik.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.xmlgraphics</groupId>
                 <artifactId>batik-svg-dom</artifactId>
                 <version>${batik.version}</version>
             </dependency>
@@ -187,14 +181,6 @@
                 <groupId>org.apache.xmlgraphics</groupId>
                 <artifactId>batik-xml</artifactId>
                 <version>${batik.version}</version>
-            </dependency>
-
-            <!-- Groovy -->
-            <dependency>
-                <groupId>org.codehaus.groovy</groupId>
-                <artifactId>groovy-all</artifactId>
-                <version>${groovy.version}</version>
-                <type>pom</type>
             </dependency>
 
             <!-- Lucene -->
