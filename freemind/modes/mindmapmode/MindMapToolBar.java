@@ -100,7 +100,10 @@ public class MindMapToolBar extends FreeMindToolBar implements ZoomListener {
 		size = new FreeMindComboBox(sizes);
 		size.setFocusable(false);
 		iconToolBar = new FreeMindToolBar();
+		iconToolBar.setOpaque(true);
+		iconToolBar.setBackground(Color.decode("#C0D0DC"));
 		iconToolBarScrollPane = new JAutoScrollBarPane(iconToolBar);
+		iconToolBarScrollPane.getViewport().setBackground(Color.decode("#C0D0DC"));
 		removeToolBar = new FreeMindToolBar();
 		removeToolBar.setFloatable(false);
 		removeToolBar.setBorderPainted(false);
