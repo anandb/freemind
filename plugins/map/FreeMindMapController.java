@@ -1347,7 +1347,7 @@ public class FreeMindMapController extends JMapController implements
 
 	public void addAccelerator(JMenuItem menuItem, String key) {
 		String keyProp = mMindMapController.getFrame().getProperty(key);
-		KeyStroke keyStroke = KeyStroke.getKeyStroke(keyProp);
+		KeyStroke keyStroke = Tools.getKeyStroke(keyProp);
 		// menuItem.setAccelerator(keyStroke);
 		menuItem.getAction().putValue(Action.ACCELERATOR_KEY, keyStroke);
 	}

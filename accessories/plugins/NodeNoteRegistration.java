@@ -315,7 +315,7 @@ public class NodeNoteRegistration implements HookRegistration,
 						"keystroke_accessories/plugins/NodeNote_jumpto.keystroke.alt_N");
 		noteViewerComponent.getInputMap(
 				JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(
-				KeyStroke.getKeyStroke(keystroke), "jumpToMapAction");
+				Tools.getKeyStroke(keystroke), "jumpToMapAction");
 
 		// Register action
 		noteViewerComponent.getActionMap().put("jumpToMapAction",

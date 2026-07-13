@@ -25,6 +25,7 @@ import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
 import freemind.extensions.ModeControllerHookAdapter;
+import freemind.main.Tools;
 import freemind.modes.mindmapmode.MindMapController;
 
 /** */
@@ -47,7 +48,7 @@ public class MindMapHookAdapter extends ModeControllerHookAdapter {
 		if(keyProp == null) {
 			logger.warning("Keystroke to " + key + " not found.");
 		}
-		KeyStroke keyStroke = KeyStroke.getKeyStroke(keyProp);
+		KeyStroke keyStroke = Tools.getKeyStroke(keyProp);
 		menuItem.setAccelerator(keyStroke);
 		menuItem.getAction().putValue(Action.ACCELERATOR_KEY, keyStroke);
 		return menuItem;

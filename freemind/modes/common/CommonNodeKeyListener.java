@@ -27,6 +27,7 @@ import java.util.logging.Logger;
 import javax.swing.KeyStroke;
 
 import freemind.main.Resources;
+import freemind.main.Tools;
 import freemind.modes.ModeController;
 
 /**
@@ -77,10 +78,10 @@ public class CommonNodeKeyListener implements KeyListener {
 				"disable_key_type");
 		keyTypeAddsNew = Resources.getInstance().getBoolProperty(
 				"key_type_adds_new");
-		keyStrokeUp = KeyStroke.getKeyStroke(up);
-		keyStrokeDown = KeyStroke.getKeyStroke(down);
-		keyStrokeLeft = KeyStroke.getKeyStroke(left);
-		keyStrokeRight = KeyStroke.getKeyStroke(right);
+		keyStrokeUp = Tools.getKeyStroke(up);
+		keyStrokeDown = Tools.getKeyStroke(down);
+		keyStrokeLeft = Tools.getKeyStroke(left);
+		keyStrokeRight = Tools.getKeyStroke(right);
 	}
 
 	//

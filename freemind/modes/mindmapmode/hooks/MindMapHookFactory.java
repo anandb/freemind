@@ -30,7 +30,6 @@ import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenuItem;
-import javax.swing.KeyStroke;
 
 import org.jibx.runtime.IUnmarshallingContext;
 
@@ -50,6 +49,7 @@ import freemind.extensions.MindMapHook.PluginBaseClassSearcher;
 import freemind.extensions.ModeControllerHook;
 import freemind.extensions.NodeHook;
 import freemind.main.Resources;
+import freemind.main.Tools;
 import freemind.modes.mindmapmode.MindMapController;
 
 /**
@@ -267,8 +267,8 @@ public class MindMapHookFactory extends HookFactoryAdapter {
 		}
 		String key = descriptor.getKeyStroke();
 		if (key != null)
-			action.putValue(AbstractAction.ACCELERATOR_KEY,
-					KeyStroke.getKeyStroke(key));
+ 			action.putValue(AbstractAction.ACCELERATOR_KEY,
+ 					Tools.getKeyStroke(key));
 
 	}
 

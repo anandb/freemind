@@ -234,7 +234,7 @@ public class MenuBar extends JMenuBar {
 			String keystroke = c.getFrame().getAdjustableProperty(
 					"keystroke_mode_" + key);
 			if (keystroke != null) {
-				newItem.setAccelerator(KeyStroke.getKeyStroke(keystroke));
+				newItem.setAccelerator(Tools.getKeyStroke(keystroke));
 			}
 			newItem.addActionListener(modesMenuActionListener);
 		}
