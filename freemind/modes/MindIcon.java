@@ -52,7 +52,11 @@ public class MindIcon implements Comparable<MindIcon>, IconInformation {
 	/**
 	 * Set of all created icons. Name -> MindIcon
 	 */
-	private static HashMap<String, MindIcon> createdIcons = new HashMap<>();
+	private static java.util.Map<String, MindIcon> createdIcons = new java.util.LinkedHashMap<String, MindIcon>(128, 0.75f, true) {
+		protected boolean removeEldestEntry(java.util.Map.Entry<String, MindIcon> eldest) {
+			return size() > 200;
+		}
+	};
 	private static final int UNKNOWN = -1;
 	public static final int LAST = UNKNOWN;
 	static int nextNumber = UNKNOWN - 1;

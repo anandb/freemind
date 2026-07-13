@@ -235,10 +235,15 @@ public class MindMapController extends ControllerAdapter implements
 		 */
 		public boolean interrupt() {
 			mIsInterrupted = true;
+			if (javax.swing.SwingUtilities.isEventDispatchThread()) {
+				mIsInterrupted = false;
+				return true;
+			}
 			int i = 1000;
 			try {
 				while (i > 0 && !mIsDone) {
 					Thread.sleep(10);
+					i--;
 				}
 			} catch (InterruptedException e) {
 				freemind.main.Resources.getInstance().logException(e);

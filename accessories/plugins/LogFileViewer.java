@@ -27,6 +27,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.HashMap;
+import java.util.WeakHashMap;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Handler;
@@ -73,7 +74,7 @@ public class LogFileViewer extends MindMapHookAdapter implements
 		 * used, as the HookRegistration are registered each time a map is
 		 * changed. Thus, a normal member isn't possible here.
 		 */
-		private static HashMap<MindMapController, PrintActionHandler> mPrintActionHandler = new HashMap<>();
+		private static WeakHashMap<MindMapController, PrintActionHandler> mPrintActionHandler = new WeakHashMap<>();
 
 		private final MindMapController modeController;
 
@@ -473,12 +474,7 @@ public class LogFileViewer extends MindMapHookAdapter implements
 		 */
 		public void commitSuicide() {
 			mCommitSuicide  = true;
-			int timeout = 100;
-			while(timeout-->0) {
-				if(mSuicided)
-					break;
-				sleepALittle();
-			}
+			this.interrupt();
 		}
 
 		protected void sleepALittle() {

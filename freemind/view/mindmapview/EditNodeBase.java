@@ -158,10 +158,12 @@ public class EditNodeBase {
 
 		protected void submit() {
 			setVisible(false);
+			dispose();
 		}
 
 		protected void cancel() {
 			setVisible(false);
+			dispose();
 		}
 
 		protected void split() {

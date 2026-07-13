@@ -356,7 +356,11 @@ public class KeyEventTranslator {
 	static int c, a, m, s;
 
 	// {{{ Private members
-	private static Map<Key,Key> transMap = new HashMap<>();
+	private static Map<Key,Key> transMap = new java.util.LinkedHashMap<Key, Key>(128, 0.75f, true) {
+		protected boolean removeEldestEntry(java.util.Map.Entry<Key, Key> eldest) {
+			return size() > 200;
+		}
+	};
 
 	static {
 		if (Tools.isMacOsX()) {

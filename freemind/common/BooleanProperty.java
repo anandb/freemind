@@ -70,13 +70,13 @@ public class BooleanProperty extends PropertyBean implements PropertyControl {
 
 	public void setValue(String value) {
 		if (value == null
-				|| !(value.toLowerCase().equals(mTrueValue) || value
-						.toLowerCase().equals(mFalseValue))) {
+				|| !(value.toLowerCase(java.util.Locale.ENGLISH).equals(mTrueValue) || value
+						.toLowerCase(java.util.Locale.ENGLISH).equals(mFalseValue))) {
 			throw new IllegalArgumentException("Cannot set a boolean to '"
 					+ value + "', allowed are " + mTrueValue + " and "
 					+ mFalseValue + ".");
 		}
-		mCheckBox.setSelected(value.toLowerCase().equals(mTrueValue));
+		mCheckBox.setSelected(value.toLowerCase(java.util.Locale.ENGLISH).equals(mTrueValue));
 	}
 
 	public String getValue() {

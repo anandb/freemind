@@ -310,7 +310,7 @@ public class Tools {
 	 */
 	public static String getExtension(String s) {
 		int i = s.lastIndexOf('.');
-		return (i > 0 && i < s.length() - 1) ? s.substring(i + 1).toLowerCase()
+		return (i > 0 && i < s.length() - 1) ? s.substring(i + 1).toLowerCase(java.util.Locale.ENGLISH)
 				.trim() : "";
 	}
 
@@ -405,16 +405,16 @@ public class Tools {
 		String result = "";
 		// remove filename from URL
 		targetString = targetString.substring(0,
-				targetString.lastIndexOf("/") + 1);
+				targetString.lastIndexOf(File.separator) + 1);
 		// remove filename from URL
-		baseString = baseString.substring(0, baseString.lastIndexOf("/") + 1);
+		baseString = baseString.substring(0, baseString.lastIndexOf(File.separator) + 1);
 
 		// Algorithm
 		// look for same start:
 		int index = targetString.length() - 1;
 		while (!baseString.startsWith(targetString.substring(0, index + 1))) {
 			// remove last part:
-			index = targetString.lastIndexOf("/", index - 1);
+			index = targetString.lastIndexOf(File.separator, index - 1);
 			if (index < 0) {
 				// no common part. This is strange, as both should start with /,
 				// but...
@@ -428,25 +428,25 @@ public class Tools {
 				.substring(index, baseString.length());
 
 		// Maybe this causes problems under windows
-		StringTokenizer baseTokens = new StringTokenizer(baseStringRest, "/");
+		StringTokenizer baseTokens = new StringTokenizer(baseStringRest, File.separator);
 
 		// Maybe this causes problems under windows
 		StringTokenizer targetTokens = new StringTokenizer(
-				targetString.substring(index + 1), "/");
+				targetString.substring(index + 1), File.separator);
 
 		String nextTargetToken = "";
 
 		while (baseTokens.hasMoreTokens()) {
-			result = result.concat("../");
+			result = result.concat(".." + File.separator);
 			baseTokens.nextToken();
 		}
 		while (targetTokens.hasMoreTokens()) {
 			nextTargetToken = targetTokens.nextToken();
-			result = result.concat(nextTargetToken + "/");
+			result = result.concat(nextTargetToken + File.separator);
 		}
 
 		String temp = target.getFile();
-		result = result.concat(temp.substring(temp.lastIndexOf("/") + 1,
+		result = result.concat(temp.substring(temp.lastIndexOf(File.separator) + 1,
 				temp.length()));
 		return result;
 	}
@@ -505,8 +505,8 @@ public class Tools {
 	}
 
 	public static boolean safeEqualsIgnoreCase(String string1, String string2) {
-		return (string1 != null && string2 != null && string1.toLowerCase()
-				.equals(string2.toLowerCase()))
+		return (string1 != null && string2 != null && string1.toLowerCase(java.util.Locale.ENGLISH)
+				.equals(string2.toLowerCase(java.util.Locale.ENGLISH)))
 				|| (string1 == null && string2 == null);
 	}
 
@@ -1510,7 +1510,7 @@ public class Tools {
 	public static boolean isMacOsX() {
 		String osName = System.getProperty("os.name");
 		// macOS 11+ returns "macOS 14.x"; older versions return "Mac OS X"
-		return osName.startsWith("Mac OS") || osName.toLowerCase().startsWith("macos");
+		return osName.startsWith("Mac OS") || osName.toLowerCase(java.util.Locale.ENGLISH).startsWith("macos");
 	}
 
 	public static boolean isLinux() {
@@ -1644,16 +1644,16 @@ public class Tools {
 		StringBuffer b = new StringBuffer();
 		if (pText1.length() > pText2.length()) {
 			b.append("First string is longer :"
-					+ pText1.substring(pText2.length()) + "\n");
+					+ pText1.substring(pText2.length()) + System.lineSeparator());
 		}
 		if (pText1.length() < pText2.length()) {
 			b.append("Second string is longer :"
-					+ pText2.substring(pText1.length()) + "\n");
+					+ pText2.substring(pText1.length()) + System.lineSeparator());
 		}
 		for (int i = 0; i < Math.min(pText1.length(), pText2.length()); i++) {
 			if (pText1.charAt(i) != pText2.charAt(i)) {
 				b.append("Difference at " + i + ": " + pText1.charAt(i) + "!="
-						+ pText2.charAt(i) + "\n");
+						+ pText2.charAt(i) + System.lineSeparator());
 			}
 
 		}

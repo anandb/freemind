@@ -59,12 +59,12 @@ public class ImageFactory {
 
 	public ImageIcon createIcon(URL pUrl){
 		if (pUrl == null) return null;
-		if (pUrl.getPath().toLowerCase().endsWith(".svg")) {
+		if (pUrl.getPath().toLowerCase(java.util.Locale.ENGLISH).endsWith(".svg")) {
 			return new SVGImageIcon(pUrl);
 		}
 		boolean isToolbarOrBubbleIcon = false;
 		if (pUrl != null) {
-			String path = pUrl.getPath().toLowerCase();
+			String path = pUrl.getPath().toLowerCase(java.util.Locale.ENGLISH);
 			if (path.contains("images/icons/") || path.contains("/icons/")) {
 				isToolbarOrBubbleIcon = true;
 			}
@@ -89,13 +89,13 @@ public class ImageFactory {
 	 */
 	public ImageIcon createUnscaledIcon(URL pResource) {
 		if (pResource == null) return null;
-		if (pResource.getPath().toLowerCase().endsWith(".svg")) {
+		if (pResource.getPath().toLowerCase(java.util.Locale.ENGLISH).endsWith(".svg")) {
 			return new SVGImageIcon(pResource);
 		}
 		ImageIcon icon = new ImageIcon(pResource);
 		boolean isToolbarOrBubbleIcon = false;
 		if (pResource != null) {
-			String path = pResource.getPath().toLowerCase();
+			String path = pResource.getPath().toLowerCase(java.util.Locale.ENGLISH);
 			if (path.contains("images/icons/") || path.contains("/icons/")) {
 				isToolbarOrBubbleIcon = true;
 			}

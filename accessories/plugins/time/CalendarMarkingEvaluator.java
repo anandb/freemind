@@ -276,7 +276,7 @@ public class CalendarMarkingEvaluator implements ICalendarMarkingEvaluator {
 	}
 	
 	
-	private static HashMap<String, RepetitionHandler> sHandlerMap;
+	private HashMap<String, RepetitionHandler> mHandlerMap;
 	protected static java.util.logging.Logger logger = null;
 
 	public CalendarMarkingEvaluator(CalendarMarkings pCalendarMarkings) {
@@ -285,19 +285,19 @@ public class CalendarMarkingEvaluator implements ICalendarMarkingEvaluator {
 			logger = freemind.main.Resources.getInstance().getLogger(
 					this.getClass().getName());
 		}
-		if (sHandlerMap == null) {
-			sHandlerMap = new HashMap<>();
-			sHandlerMap.put(CalendarMarking.NEVER, new NeverHandler());
-			sHandlerMap.put(CalendarMarking.DAILY, new DailyHandler());
-			sHandlerMap.put(CalendarMarking.WEEKLY, new WeeklyHandler());
-			sHandlerMap.put(CalendarMarking.WEEKLY_EVERY_NTH_DAY, new WeeklyEveryNthDayHandler());
-			sHandlerMap.put(CalendarMarking.MONTHLY, new MonthlyHandler());
-			sHandlerMap.put(CalendarMarking.MONTHLY_EVERY_NTH_DAY, new MonthlyEveryNthDayHandler());
-			sHandlerMap.put(CalendarMarking.MONTHLY_EVERY_NTH_WEEK, new MonthlyEveryNthWeekHandler());
-			sHandlerMap.put(CalendarMarking.YEARLY, new YearlyHandler());
-			sHandlerMap.put(CalendarMarking.YEARLY_EVERY_NTH_DAY, new YearlyEveryNthDayHandler());
-			sHandlerMap.put(CalendarMarking.YEARLY_EVERY_NTH_WEEK, new YearlyEveryNthWeekHandler());
-			sHandlerMap.put(CalendarMarking.YEARLY_EVERY_NTH_MONTH, new YearlyEveryNthMonthHandler());
+		if (mHandlerMap == null) {
+			mHandlerMap = new HashMap<>();
+			mHandlerMap.put(CalendarMarking.NEVER, new NeverHandler());
+			mHandlerMap.put(CalendarMarking.DAILY, new DailyHandler());
+			mHandlerMap.put(CalendarMarking.WEEKLY, new WeeklyHandler());
+			mHandlerMap.put(CalendarMarking.WEEKLY_EVERY_NTH_DAY, new WeeklyEveryNthDayHandler());
+			mHandlerMap.put(CalendarMarking.MONTHLY, new MonthlyHandler());
+			mHandlerMap.put(CalendarMarking.MONTHLY_EVERY_NTH_DAY, new MonthlyEveryNthDayHandler());
+			mHandlerMap.put(CalendarMarking.MONTHLY_EVERY_NTH_WEEK, new MonthlyEveryNthWeekHandler());
+			mHandlerMap.put(CalendarMarking.YEARLY, new YearlyHandler());
+			mHandlerMap.put(CalendarMarking.YEARLY_EVERY_NTH_DAY, new YearlyEveryNthDayHandler());
+			mHandlerMap.put(CalendarMarking.YEARLY_EVERY_NTH_WEEK, new YearlyEveryNthWeekHandler());
+			mHandlerMap.put(CalendarMarking.YEARLY_EVERY_NTH_MONTH, new YearlyEveryNthMonthHandler());
 		}
 	}
 
@@ -314,11 +314,11 @@ public class CalendarMarkingEvaluator implements ICalendarMarkingEvaluator {
 			Calendar firstDay = Calendar.getInstance();
 			firstDay.setTimeInMillis(marking.getStartDate());
 			String repeatType = marking.getRepeatType();
-			if(!sHandlerMap.containsKey(repeatType)){
+			if(!mHandlerMap.containsKey(repeatType)){
 				logger.severe("Repeat type " + repeatType + " unknown.");
 				continue;
 			}
-			RepetitionHandler handler = sHandlerMap
+			RepetitionHandler handler = mHandlerMap
 					.get(repeatType);
 			firstDay = handler.getFirst(firstDay, marking);
 			if(firstDay == null){
@@ -356,7 +356,7 @@ public class CalendarMarkingEvaluator implements ICalendarMarkingEvaluator {
 			// get first occurrence:
 			Calendar firstDay = Calendar.getInstance();
 			firstDay.setTimeInMillis(marking.getStartDate());
-			RepetitionHandler handler = sHandlerMap
+			RepetitionHandler handler = mHandlerMap
 					.get(marking.getRepeatType());
 			firstDay = handler.getFirst(firstDay, marking);
 			if(firstDay == null){
@@ -398,7 +398,7 @@ public class CalendarMarkingEvaluator implements ICalendarMarkingEvaluator {
 			// get first occurrence:
 			Calendar firstDay = Calendar.getInstance();
 			firstDay.setTimeInMillis(marking.getStartDate());
-			RepetitionHandler handler = sHandlerMap
+			RepetitionHandler handler = mHandlerMap
 					.get(marking.getRepeatType());
 			firstDay = handler.getFirst(firstDay, marking);
 			printDate(firstDay);

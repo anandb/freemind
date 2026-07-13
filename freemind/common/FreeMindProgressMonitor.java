@@ -146,24 +146,5 @@ public class FreeMindProgressMonitor extends JDialog {
 		this.setVisible(false);
 	}
 
-	/**
-	 * Test method for this dialog.
-	 */
-	public static void main(String[] args) throws InterruptedException {
-		FreeMindMainMock mock = new FreeMindMainMock();
-		Resources.createInstance(mock);
-		FreeMindProgressMonitor progress = new FreeMindProgressMonitor("title");
-		progress.setVisible(true);
-		for (int i = 0; i < 10; i++) {
-			boolean canceled = progress.showProgress(i, 10, "inhalt {0}",
-					new Object[] { Integer.valueOf(i) });
-			if (canceled) {
-				progress.dismiss();
-				System.exit(1);
-			}
-			Thread.sleep(1000l);
-		}
-		progress.dismiss();
-		System.exit(0);
-	}
+
 }
