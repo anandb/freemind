@@ -314,16 +314,20 @@ public class MindMapToolBar extends FreeMindToolBar implements ZoomListener {
 		}
 		configureToolbarButtons(removeToolBar);
 		configureToolbarButtons(iconToolBar);
+		autoSizeGrid();
 		iconToolBar.revalidate();
 		iconToolBarScrollPane.revalidate();
 	}
 
 	private void configureToolbarButtons(JToolBar toolBar) {
+		int iconSize = getController().getIntProperty(FreeMind.RESOURCES_TOOLBAR_ICON_SIZE, 48);
 		for (int i = 0; i < toolBar.getComponentCount(); i++) {
 			java.awt.Component comp = toolBar.getComponent(i);
 			if (comp instanceof AbstractButton) {
 				final AbstractButton btn = (AbstractButton) comp;
 				btn.setFocusable(true);
+				// Make grid cells square
+				btn.setPreferredSize(new java.awt.Dimension(iconSize, iconSize));
 				
 				// Keep track of original visual states
 				final javax.swing.border.Border originalBorder = btn.getBorder();
@@ -410,6 +414,18 @@ public class MindMapToolBar extends FreeMindToolBar implements ZoomListener {
 					}
 				});
 			}
+		}
+	}
+
+	private void autoSizeGrid() {
+		int gap = 16;
+		String iconBarPosition = getController().getProperty(FreeMind.ICON_BAR_POSITION);
+		if ("top".equals(iconBarPosition)) {
+			int rows = getController().getIntProperty(FreeMind.ICON_BAR_ROW_AMOUNT, 1);
+			iconToolBar.setLayout(new GridLayout(rows, 0, gap, gap));
+		} else {
+			int cols = getController().getIntProperty(FreeMind.ICON_BAR_COLUMN_AMOUNT, 1);
+			iconToolBar.setLayout(new GridLayout(0, cols, gap, gap));
 		}
 	}
 
@@ -636,6 +652,7 @@ public class MindMapToolBar extends FreeMindToolBar implements ZoomListener {
 				comps[i].setVisible(match);
 			}
 		}
+		autoSizeGrid();
 		iconToolBar.revalidate();
 		iconToolBarScrollPane.revalidate();
 		iconToolBar.repaint();

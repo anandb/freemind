@@ -192,6 +192,10 @@ public class MindIcon implements Comparable<MindIcon>, IconInformation {
 				}
 			}
 			if (imageURL == null) {
+				// Try fallback PNG
+				imageURL = Resources.getInstance().getResource(getIconsPath() + "fallback/" + getName() + ".png");
+			}
+			if (imageURL == null) {
 				// Try standard PNG
 				imageURL = Resources.getInstance().getResource(getIconFileName());
 			}
