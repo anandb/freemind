@@ -178,23 +178,8 @@ public class MindIcon implements Comparable<MindIcon>, IconInformation {
 		if (associatedIcon != null)
 			return associatedIcon;
 		if (name != null) {
-			// Try standard SVG first
-			URL imageURL = Resources.getInstance().getResource(getIconsPath() + getName() + ".svg");
-			if (imageURL == null) {
-				// Try user SVG
-				try {
-					final File file = new File(Resources.getInstance()
-							.getFreemindDirectory(), "icons/" + getName() + ".svg");
-					if (file.canRead()) {
-						imageURL = Tools.fileToUrl(file);
-					}
-				} catch (Exception e) {
-				}
-			}
-			if (imageURL == null) {
-				// Try fallback PNG
-				imageURL = Resources.getInstance().getResource(getIconsPath() + "fallback/" + getName() + ".png");
-			}
+			// Try fallback PNG first (original icons)
+			URL imageURL = Resources.getInstance().getResource(getIconsPath() + "fallback/" + getName() + ".png");
 			if (imageURL == null) {
 				// Try standard PNG
 				imageURL = Resources.getInstance().getResource(getIconFileName());
@@ -203,6 +188,21 @@ public class MindIcon implements Comparable<MindIcon>, IconInformation {
 				try {
 					final File file = new File(Resources.getInstance()
 							.getFreemindDirectory(), "icons/" + getName() + ".png");
+					if (file.canRead()) {
+						imageURL = Tools.fileToUrl(file);
+					}
+				} catch (Exception e) {
+				}
+			}
+			if (imageURL == null) {
+				// Try SVG
+				imageURL = Resources.getInstance().getResource(getIconsPath() + getName() + ".svg");
+			}
+			if (imageURL == null) {
+				// Try user SVG
+				try {
+					final File file = new File(Resources.getInstance()
+							.getFreemindDirectory(), "icons/" + getName() + ".svg");
 					if (file.canRead()) {
 						imageURL = Tools.fileToUrl(file);
 					}

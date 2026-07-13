@@ -25,6 +25,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 import javax.swing.event.PopupMenuEvent;
+import freemind.main.Tools;
 import javax.swing.event.PopupMenuListener;
 
 @SuppressWarnings("serial")
@@ -34,7 +35,7 @@ public class BrowsePopupMenu extends JPopupMenu implements PopupMenuListener {
 
 	protected void add(Action action, String keystroke) {
 		JMenuItem item = add(action);
-		item.setAccelerator(KeyStroke.getKeyStroke(c.getFrame()
+		item.setAccelerator(Tools.getKeyStroke(c.getFrame()
 				.getAdjustableProperty(keystroke)));
 	}
 

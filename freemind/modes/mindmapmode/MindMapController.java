@@ -1109,7 +1109,7 @@ public class MindMapController extends ControllerAdapter implements
 		for (int i = 0; i < patterns.length; ++i) {
 			JMenuItem item = holder.addAction(patterns[i], formatMenuString
 					+ "patterns/patterns/" + i);
-			item.setAccelerator(KeyStroke
+			item.setAccelerator(Tools
 					.getKeyStroke(getFrame().getAdjustableProperty(
 							"keystroke_apply_pattern_" + (i + 1))));
 		}

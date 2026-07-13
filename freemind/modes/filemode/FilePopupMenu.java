@@ -25,6 +25,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 
+import freemind.main.Tools;
+
 @SuppressWarnings("serial")
 public class FilePopupMenu extends JPopupMenu {
 
@@ -32,7 +34,7 @@ public class FilePopupMenu extends JPopupMenu {
 
 	protected void add(Action action, String keystroke) {
 		JMenuItem item = add(action);
-		item.setAccelerator(KeyStroke.getKeyStroke(c.getFrame()
+		item.setAccelerator(Tools.getKeyStroke(c.getFrame()
 				.getAdjustableProperty(keystroke)));
 	}
 

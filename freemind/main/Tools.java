@@ -1530,8 +1530,13 @@ public class Tools {
 		if (keyStrokeDescription == null) {
 			return null;
 		}
+		// On macOS, remap "control" to "meta" so shortcuts use Cmd instead of Ctrl
+		String description = keyStrokeDescription;
+		if (isMacOsX()) {
+			description = description.replaceAll("\\bcontrol\\b", "meta");
+		}
 		final KeyStroke keyStroke = KeyStroke
-				.getKeyStroke(keyStrokeDescription);
+				.getKeyStroke(description);
 		if (keyStroke != null)
 			return keyStroke;
 		return KeyStroke.getKeyStroke("typed " + keyStrokeDescription);

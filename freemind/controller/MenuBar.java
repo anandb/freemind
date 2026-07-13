@@ -44,6 +44,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import freemind.main.FreeMind;
+import freemind.main.Tools;
 import freemind.modes.ModeController;
 import freemind.modes.mindmapmode.MindMapController;
 import freemind.view.MapModule;
@@ -283,21 +284,21 @@ public class MenuBar extends JMenuBar {
 		menuHolder.addAction(c.page, FILE_MENU + "print/pageSetup");
 		JMenuItem print = menuHolder.addAction(c.print, FILE_MENU
 				+ "print/print");
-		print.setAccelerator(KeyStroke.getKeyStroke(c.getFrame()
+		print.setAccelerator(Tools.getKeyStroke(c.getFrame()
 				.getAdjustableProperty("keystroke_print")));
 
 		JMenuItem printPreview = menuHolder.addAction(c.printPreview, FILE_MENU
 				+ "print/printPreview");
-		printPreview.setAccelerator(KeyStroke.getKeyStroke(c.getFrame()
+		printPreview.setAccelerator(Tools.getKeyStroke(c.getFrame()
 				.getAdjustableProperty("keystroke_print_preview")));
 
 		JMenuItem close = menuHolder.addAction(c.close, FILE_MENU
 				+ "close/close");
-		close.setAccelerator(KeyStroke.getKeyStroke(c.getFrame()
+		close.setAccelerator(Tools.getKeyStroke(c.getFrame()
 				.getAdjustableProperty("keystroke_close")));
 
 		JMenuItem quit = menuHolder.addAction(c.quit, FILE_MENU + "quit/quit");
-		quit.setAccelerator(KeyStroke.getKeyStroke(c.getFrame()
+		quit.setAccelerator(Tools.getKeyStroke(c.getFrame()
 				.getAdjustableProperty("keystroke_quit")));
 		updateLastOpenedList();
 	}
@@ -312,7 +313,7 @@ public class MenuBar extends JMenuBar {
 			JMenuItem item = new JMenuItem(key);
 			if (firstElement) {
 				firstElement = false;
-				item.setAccelerator(KeyStroke.getKeyStroke(c.getFrame()
+				item.setAccelerator(Tools.getKeyStroke(c.getFrame()
 						.getAdjustableProperty(
 								"keystroke_open_first_in_history")));
 			}
@@ -326,29 +327,29 @@ public class MenuBar extends JMenuBar {
 	private void updateEditMenu() {
 		JMenuItem moveToRoot = menuHolder.addAction(c.moveToRoot, NAVIGATE_MENU
 				+ "nodes/moveToRoot");
-		moveToRoot.setAccelerator(KeyStroke.getKeyStroke(c.getFrame()
+		moveToRoot.setAccelerator(Tools.getKeyStroke(c.getFrame()
 				.getAdjustableProperty("keystroke_moveToRoot")));
 
 		JMenuItem previousMap = menuHolder.addAction(c.navigationPreviousMap,
 				MINDMAP_MENU + "navigate/navigationPreviousMap");
-		previousMap.setAccelerator(KeyStroke.getKeyStroke(c.getFrame()
+		previousMap.setAccelerator(Tools.getKeyStroke(c.getFrame()
 				.getAdjustableProperty(FreeMind.KEYSTROKE_PREVIOUS_MAP)));
 
 		JMenuItem nextMap = menuHolder.addAction(c.navigationNextMap,
 				MINDMAP_MENU + "navigate/navigationNextMap");
-		nextMap.setAccelerator(KeyStroke.getKeyStroke(c.getFrame()
+		nextMap.setAccelerator(Tools.getKeyStroke(c.getFrame()
 				.getAdjustableProperty(FreeMind.KEYSTROKE_NEXT_MAP)));
 
 		JMenuItem MoveMapLeft = menuHolder.addAction(
 				c.navigationMoveMapLeftAction, MINDMAP_MENU
 						+ "navigate/navigationMoveMapLeft");
-		MoveMapLeft.setAccelerator(KeyStroke.getKeyStroke(c.getFrame()
+		MoveMapLeft.setAccelerator(Tools.getKeyStroke(c.getFrame()
 				.getAdjustableProperty(FreeMind.KEYSTROKE_MOVE_MAP_LEFT)));
 
 		JMenuItem MoveMapRight = menuHolder.addAction(
 				c.navigationMoveMapRightAction, MINDMAP_MENU
 						+ "navigate/navigationMoveMapRight");
-		MoveMapRight.setAccelerator(KeyStroke.getKeyStroke(c.getFrame()
+		MoveMapRight.setAccelerator(Tools.getKeyStroke(c.getFrame()
 				.getAdjustableProperty(FreeMind.KEYSTROKE_MOVE_MAP_RIGHT)));
 
 		// option menu item moved to mindmap_menus.xml
@@ -375,12 +376,12 @@ public class MenuBar extends JMenuBar {
 		menuHolder.addAction(c.showSelectionAsRectangle, VIEW_MENU+ "general/selectionAsRectangle");
 
 		JMenuItem zoomIn = menuHolder.addAction(c.zoomIn, VIEW_MENU+ "zoom/zoomIn");
-		zoomIn.setAccelerator(KeyStroke.getKeyStroke(c.getFrame()
+		zoomIn.setAccelerator(Tools.getKeyStroke(c.getFrame()
 				.getAdjustableProperty("keystroke_zoom_in")));
 
 		JMenuItem zoomOut = menuHolder.addAction(c.zoomOut, VIEW_MENU
 				+ "zoom/zoomOut");
-		zoomOut.setAccelerator(KeyStroke.getKeyStroke(c.getFrame()
+		zoomOut.setAccelerator(Tools.getKeyStroke(c.getFrame()
 				.getAdjustableProperty("keystroke_zoom_out")));
 
 		menuHolder.addSeparator(VIEW_MENU);

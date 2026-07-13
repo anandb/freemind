@@ -687,7 +687,7 @@ public abstract class ControllerAdapter extends MapFeedbackAdapter implements Mo
 	/** @return returns the new JMenuItem. */
 	protected JMenuItem add(JMenu menu, Action action, String keystroke) {
 		JMenuItem item = menu.add(action);
-		item.setAccelerator(KeyStroke.getKeyStroke(getFrame()
+		item.setAccelerator(Tools.getKeyStroke(getFrame()
 				.getAdjustableProperty(keystroke)));
 		return item;
 	}
@@ -703,7 +703,7 @@ public abstract class ControllerAdapter extends MapFeedbackAdapter implements Mo
 		if (keystroke != null) {
 			String keyProperty = getFrame().getAdjustableProperty(keystroke);
 			logger.finest("Found key stroke: " + keyProperty);
-			item.setAccelerator(KeyStroke.getKeyStroke(keyProperty));
+			item.setAccelerator(Tools.getKeyStroke(keyProperty));
 		}
 		return item;
 	}
@@ -718,7 +718,7 @@ public abstract class ControllerAdapter extends MapFeedbackAdapter implements Mo
 		JCheckBoxMenuItem item = (JCheckBoxMenuItem) holder.addMenuItem(
 				new JCheckBoxMenuItem(action), category);
 		if (keystroke != null) {
-			item.setAccelerator(KeyStroke.getKeyStroke(getFrame()
+			item.setAccelerator(Tools.getKeyStroke(getFrame()
 					.getAdjustableProperty(keystroke)));
 		}
 		return item;
@@ -729,7 +729,7 @@ public abstract class ControllerAdapter extends MapFeedbackAdapter implements Mo
 		JRadioButtonMenuItem item = (JRadioButtonMenuItem) holder.addMenuItem(
 				new JRadioButtonMenuItem(action), category);
 		if (keystroke != null) {
-			item.setAccelerator(KeyStroke.getKeyStroke(getFrame()
+			item.setAccelerator(Tools.getKeyStroke(getFrame()
 					.getAdjustableProperty(keystroke)));
 		}
 		item.setSelected(isSelected);
