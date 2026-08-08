@@ -38,3 +38,5 @@ build.xml
 version.properties
 .idea
 nb-*.xml
+
+.graymatter
