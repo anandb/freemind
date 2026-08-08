@@ -31,7 +31,6 @@ import java.net.URL;
 import java.util.Properties;
 import java.util.Vector;
 
-import freemind.main.FreeMindSecurityManager;
 import freemind.main.HtmlTools;
 import freemind.main.Tools;
 import freemind.modes.MapAdapter;
@@ -208,23 +207,6 @@ public class ToolsTests extends FreeMindTestBase {
 	}
 
 	public void testUpdate() throws FileNotFoundException, IOException {
-		doUpdate();
-	}
-
-	public void testUpdateWithSecurityManager() throws FileNotFoundException,
-			IOException {
-		/**
-		 * Due to a java bug (in version 7 update 4), setting a security manager
-		 * (this is normally done in FreeMind) breaks the update. This is tested
-		 * here.
-		 */
-		try {
-			System.setSecurityManager(new FreeMindSecurityManager());
-		} catch (UnsupportedOperationException e) {
-			// SecurityManager is deprecated for removal in Java 21+;
-			// skip test when JVM doesn't allow it.
-			return;
-		}
 		doUpdate();
 	}
 

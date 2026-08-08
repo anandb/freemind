@@ -291,13 +291,6 @@ public class FreeMind extends JFrame implements FreeMindMain, ActionListener {
 	public FreeMind(Properties pDefaultPreferences,
 			Properties pUserPreferences, File pAutoPropertiesFile) {
 		super("FreeMind");
-		if (Runtime.version().feature() < 17) {
-			try {
-				System.setSecurityManager(new FreeMindSecurityManager());
-			} catch (Throwable t) {
-				System.err.println("Could not set FreeMindSecurityManager: " + t.getMessage());
-			}
-		}
 		defProps = pDefaultPreferences;
 		props = pUserPreferences;
 		autoPropertiesFile = pAutoPropertiesFile;
