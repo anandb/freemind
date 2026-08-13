@@ -27,13 +27,18 @@ import java.awt.GridLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractButton;
+import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Box;
+import javax.swing.ButtonGroup;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JToolBar;
 
 import freemind.controller.Controller;
@@ -41,6 +46,13 @@ import freemind.controller.FreeMindToolBar;
 import freemind.modes.mindmapmode.actions.IconAction;
 import freemind.modes.MindIcon;
 import freemind.controller.StructuredMenuHolder;
+import freemind.controller.filter.DefaultFilter;
+import freemind.controller.filter.Filter;
+import freemind.controller.filter.condition.Condition;
+import freemind.controller.filter.condition.IconContainedCondition;
+import freemind.controller.filter.condition.IconNotContainedCondition;
+import freemind.controller.filter.condition.NoFilteringCondition;
+import freemind.modes.MindMap;
 import freemind.controller.ZoomListener;
 import freemind.controller.color.ColorPair;
 import freemind.controller.color.JColorCombo;
@@ -77,6 +89,7 @@ public class MindMapToolBar extends FreeMindToolBar implements ZoomListener {
 	private JToolBar iconToolBar;
 	private javax.swing.JTextField searchBox;
 	private JToolBar removeToolBar;
+	private Action filterAction;
 	private boolean fontSize_IgnoreChangeEvent = false;
 	private boolean fontFamily_IgnoreChangeEvent = false;
 	private boolean color_IgnoreChangeEvent = false;
@@ -305,6 +318,7 @@ public class MindMapToolBar extends FreeMindToolBar implements ZoomListener {
 		removeToolBar.removeAll();
 		removeToolBar.add(c.removeLastIconAction);
 		removeToolBar.add(c.removeAllIconsAction);
+		removeToolBar.add(createFilterAction());
 		removeToolBar.addSeparator();
 		removeToolBar.revalidate();
 		// icon tool bar (inside scroll pane, filterable)
@@ -317,6 +331,69 @@ public class MindMapToolBar extends FreeMindToolBar implements ZoomListener {
 		autoSizeGrid();
 		iconToolBar.revalidate();
 		iconToolBarScrollPane.revalidate();
+	}
+
+	private Action createFilterAction() {
+		if (filterAction == null) {
+			filterAction = new AbstractAction() {
+				private static final long serialVersionUID = 1L;
+				{
+					putValue(Action.NAME, Resources.getInstance()
+							.getText("filter_status_button_tooltip"));
+					putValue(Action.SMALL_ICON, ImageFactory.getInstance()
+							.createIcon("images/funnel.svg"));
+					putValue(Action.SHORT_DESCRIPTION, Resources.getInstance()
+							.getText("filter_status_button_tooltip"));
+				}
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					Component anchor = (e.getSource() instanceof Component)
+							? (Component) e.getSource() : MindMapToolBar.this.removeToolBar;
+					showFilterMenu(anchor);
+				}
+			};
+		}
+		return filterAction;
+	}
+
+	private void showFilterMenu(Component anchor) {
+		JPopupMenu menu = new JPopupMenu();
+		ButtonGroup group = new ButtonGroup();
+		JRadioButtonMenuItem allItem = addFilterMenuItem(menu, group, "filter_status_all",
+				NoFilteringCondition.createCondition());
+		addFilterMenuItem(menu, group, "filter_status_complete",
+				new IconContainedCondition("button_ok"));
+		addFilterMenuItem(menu, group, "filter_status_pending",
+				new IconNotContainedCondition("button_ok"));
+		// 'All' is the default state.
+		allItem.setSelected(true);
+		menu.show(anchor, 0, anchor.getHeight());
+	}
+
+	private JRadioButtonMenuItem addFilterMenuItem(JPopupMenu menu, ButtonGroup group,
+			String textKey, Condition condition) {
+		JRadioButtonMenuItem item = new JRadioButtonMenuItem(
+				Resources.getInstance().getText(textKey));
+		item.addActionListener(e -> applyFilter(condition));
+		group.add(item);
+		menu.add(item);
+		return item;
+	}
+
+	private void applyFilter(Condition condition) {
+		Controller controller = getController();
+		MindMap map = controller.getModel();
+		if (map == null) {
+			return;
+		}
+		// show ancestors so that the path from a visible node up to the root
+		// is always displayed.
+		Filter filter = new DefaultFilter(condition, true, false);
+		map.setFilter(filter);
+		filter.applyFilter(controller);
+		controller.getModeController().refreshMap();
+		DefaultFilter.selectVisibleNode(controller.getView());
 	}
 
 	private void configureToolbarButtons(JToolBar toolBar) {

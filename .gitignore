@@ -40,3 +40,4 @@ version.properties
 nb-*.xml
 
 .graymatter
+.opencode-trace
