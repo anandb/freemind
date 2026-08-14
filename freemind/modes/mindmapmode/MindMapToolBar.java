@@ -83,6 +83,13 @@ public class MindMapToolBar extends FreeMindToolBar implements ZoomListener {
 
 	private static final String[] sizes = { "8", "10", "12", "14", "16", "18",
 			"20", "24", "28" };
+
+	/** Preference key storing the selected filter-status state. */
+	private static final String FILTER_STATUS_PROPERTY = "filter_status_state";
+	private static final String FILTER_STATUS_ALL = "all";
+	private static final String FILTER_STATUS_COMPLETE = "complete";
+	private static final String FILTER_STATUS_PENDING = "pending";
+
 	private MindMapController c;
 	private JComboBox<String> fonts, size;
 	private JAutoScrollBarPane iconToolBarScrollPane;
@@ -90,6 +97,8 @@ public class MindMapToolBar extends FreeMindToolBar implements ZoomListener {
 	private javax.swing.JTextField searchBox;
 	private JToolBar removeToolBar;
 	private Action filterAction;
+	/** Currently applied filter-state (all/complete/pending). */
+	private String filterStatus = FILTER_STATUS_ALL;
 	private boolean fontSize_IgnoreChangeEvent = false;
 	private boolean fontFamily_IgnoreChangeEvent = false;
 	private boolean color_IgnoreChangeEvent = false;
@@ -361,24 +370,57 @@ public class MindMapToolBar extends FreeMindToolBar implements ZoomListener {
 		JPopupMenu menu = new JPopupMenu();
 		ButtonGroup group = new ButtonGroup();
 		JRadioButtonMenuItem allItem = addFilterMenuItem(menu, group, "filter_status_all",
-				NoFilteringCondition.createCondition());
-		addFilterMenuItem(menu, group, "filter_status_complete",
-				new IconContainedCondition("button_ok"));
-		addFilterMenuItem(menu, group, "filter_status_pending",
-				new IconNotContainedCondition("button_ok"));
-		// 'All' is the default state.
-		allItem.setSelected(true);
+				FILTER_STATUS_ALL, NoFilteringCondition.createCondition());
+		JRadioButtonMenuItem completeItem = addFilterMenuItem(menu, group, "filter_status_complete",
+				FILTER_STATUS_COMPLETE, new IconContainedCondition("button_ok"));
+		JRadioButtonMenuItem pendingItem = addFilterMenuItem(menu, group, "filter_status_pending",
+				FILTER_STATUS_PENDING, new IconNotContainedCondition("button_ok"));
+		// Select the previously applied state ('All' is the default).
+		JRadioButtonMenuItem selectedItem = allItem;
+		if (FILTER_STATUS_COMPLETE.equals(filterStatus)) {
+			selectedItem = completeItem;
+		} else if (FILTER_STATUS_PENDING.equals(filterStatus)) {
+			selectedItem = pendingItem;
+		}
+		selectedItem.setSelected(true);
 		menu.show(anchor, 0, anchor.getHeight());
 	}
 
 	private JRadioButtonMenuItem addFilterMenuItem(JPopupMenu menu, ButtonGroup group,
-			String textKey, Condition condition) {
+			String textKey, String status, Condition condition) {
 		JRadioButtonMenuItem item = new JRadioButtonMenuItem(
 				Resources.getInstance().getText(textKey));
-		item.addActionListener(e -> applyFilter(condition));
+		item.addActionListener(e -> {
+			filterStatus = status;
+			getController().setProperty(FILTER_STATUS_PROPERTY, status);
+			applyFilter(condition);
+		});
 		group.add(item);
 		menu.add(item);
 		return item;
+	}
+
+	/**
+	 * Re-applies the filter-state saved in the preferences at startup.
+	 */
+	private void applySavedFilter() {
+		String saved = getController().getProperty(FILTER_STATUS_PROPERTY);
+		if (saved == null) {
+			return;
+		}
+		switch (saved) {
+		case FILTER_STATUS_COMPLETE:
+			filterStatus = FILTER_STATUS_COMPLETE;
+			applyFilter(new IconContainedCondition("button_ok"));
+			break;
+		case FILTER_STATUS_PENDING:
+			filterStatus = FILTER_STATUS_PENDING;
+			applyFilter(new IconNotContainedCondition("button_ok"));
+			break;
+		default:
+			filterStatus = FILTER_STATUS_ALL;
+			break;
+		}
 	}
 
 	private void applyFilter(Condition condition) {
@@ -700,6 +742,7 @@ public class MindMapToolBar extends FreeMindToolBar implements ZoomListener {
 
 	public void startup() {
 		getController().registerZoomListener(this);
+		applySavedFilter();
 	}
 		
 	public void shutdown() {
