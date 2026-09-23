@@ -53,18 +53,18 @@ public class ConditionNotSatisfiedDecorator implements Condition {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * freemind.controller.filter.condition.Condition#checkNode(freemind.modes
 	 * .MindMapNode)
 	 */
 	public boolean checkNode(Controller c, MindMapNode node) {
-		return !originalCondition.checkNode(null, node);
+		return !originalCondition.checkNode(c, node);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * freemind.controller.filter.condition.Condition#getListCellRendererComponent
 	 * ()

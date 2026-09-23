@@ -34,7 +34,6 @@ import freemind.modes.MindMapNode;
 public class NoFilteringCondition implements Condition {
 
 	private static String description;
-	private static JComponent renderer;
 	private static NoFilteringCondition condition;
 
 	private NoFilteringCondition() {
@@ -55,10 +54,7 @@ public class NoFilteringCondition implements Condition {
 	}
 
 	public JComponent getListCellRendererComponent() {
-		if (renderer == null) {
-			renderer = new JLabel(description);
-		}
-		return renderer;
+		return new JLabel(toString());
 	}
 
 	public static Condition createCondition() {

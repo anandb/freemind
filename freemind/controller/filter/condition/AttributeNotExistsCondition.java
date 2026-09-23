@@ -46,7 +46,7 @@ public class AttributeNotExistsCondition extends NodeCondition {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * freemind.controller.filter.condition.Condition#checkNode(freemind.modes
 	 * .MindMapNode)
@@ -55,9 +55,9 @@ public class AttributeNotExistsCondition extends NodeCondition {
 		for (int i = 0; i < node.getAttributeTableLength(); i++) {
 			Attribute attribute2 = node.getAttribute(i);
 			if (attribute2.getName().equals(attribute))
-				return true;
+				return false;
 		}
-		return false;
+		return true;
 	}
 
 	public void save(XMLElement element) {

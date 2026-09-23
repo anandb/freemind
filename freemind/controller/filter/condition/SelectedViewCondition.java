@@ -34,7 +34,6 @@ import freemind.view.mindmapview.NodeView;
 public class SelectedViewCondition implements Condition {
 
 	private static String description;
-	private static JComponent renderer;
 	private static Condition condition;
 
 	public SelectedViewCondition() {
@@ -56,11 +55,7 @@ public class SelectedViewCondition implements Condition {
 	}
 
 	public JComponent getListCellRendererComponent() {
-		if (renderer == null) {
-			renderer = ConditionFactory
-					.createCellRendererComponent(description);
-		}
-		return renderer;
+		return ConditionFactory.createCellRendererComponent(toString());
 	}
 
 	public static Condition CreateCondition() {

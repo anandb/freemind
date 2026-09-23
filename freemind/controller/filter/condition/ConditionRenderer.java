@@ -25,11 +25,13 @@ package freemind.controller.filter.condition;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Container;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
+import javax.swing.UIManager;
 
 import freemind.main.Resources;
 import freemind.modes.MindIcon;
@@ -41,11 +43,9 @@ import freemind.modes.MindIcon;
  */
 public class ConditionRenderer implements ListCellRenderer<Object> {
 
-	final public static Color SELECTED_BACKGROUND = new Color(207, 247, 202);
-
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * javax.swing.ListCellRenderer#getListCellRendererComponent(javax.swing
 	 * .JList, java.lang.Object, int, boolean, boolean)
@@ -64,14 +64,56 @@ public class ConditionRenderer implements ListCellRenderer<Object> {
 		} else {
 			component = new JLabel(value.toString());
 		}
+		// Use the look and feel's colours instead of hard-coded ones, so that
+		// the renderer also works with dark themes. Otherwise an opaque white
+		// cell would be painted underneath the light foreground colour used by
+		// such themes, making the condition text unreadable.
 		component.setOpaque(true);
 		if (isSelected) {
-			component.setBackground(SELECTED_BACKGROUND);
+			component.setBackground(selectionBackground(list));
+			setForegroundDeep(component, selectionForeground(list));
 		} else {
-			component.setBackground(Color.WHITE);
+			component.setBackground(background(list));
+			setForegroundDeep(component, foreground(list));
 		}
 		component.setAlignmentX(Component.LEFT_ALIGNMENT);
 		return component;
+	}
+
+	private static Color background(JList<?> list) {
+		return list != null ? list.getBackground() : UIManager
+				.getColor("List.background");
+	}
+
+	private static Color selectionBackground(JList<?> list) {
+		return list != null ? list.getSelectionBackground() : UIManager
+				.getColor("List.selectionBackground");
+	}
+
+	private static Color foreground(JList<?> list) {
+		return list != null ? list.getForeground() : UIManager
+				.getColor("List.foreground");
+	}
+
+	private static Color selectionForeground(JList<?> list) {
+		return list != null ? list.getSelectionForeground() : UIManager
+				.getColor("List.selectionForeground");
+	}
+
+	/**
+	 * Sets the foreground colour on the component and all of its children.
+	 * Condition renderers are composite components (see {@link JCondition})
+	 * whose child labels do not inherit the foreground of their parent.
+	 */
+	private static void setForegroundDeep(Component component, Color foreground) {
+		if (foreground != null) {
+			component.setForeground(foreground);
+		}
+		if (component instanceof Container) {
+			for (Component child : ((Container) component).getComponents()) {
+				setForegroundDeep(child, foreground);
+			}
+		}
 	}
 
 }
