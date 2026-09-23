@@ -68,7 +68,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JToolBar;
-import javax.swing.KeyStroke;
 import javax.swing.Timer;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.text.BadLocationException;
@@ -213,11 +212,145 @@ import freemind.view.MapModule;
 import freemind.view.mindmapview.MainView;
 import freemind.view.mindmapview.MapView;
 import freemind.view.mindmapview.NodeView;
+import java.awt.KeyEventDispatcher;
+import java.awt.KeyboardFocusManager;
+import java.awt.Window;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
+import javax.swing.JRootPane;
+import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 @SuppressWarnings("serial")
 public class MindMapController extends ControllerAdapter implements
 		ExtendedMapFeedback, MapSourceChangedObserver {
 
+    private transient KeyboardFocusManager mLeftRightKeyDispatcherKfm;
+    private transient KeyEventDispatcher mLeftRightKeyDispatcher;
 	public static final String REGEXP_FOR_NUMBERS_IN_STRINGS = "([+\\-]?[0-9]*[.,]?[0-9]+)\\b";
+
+    private void installLeftRightNodeLevelKeyBindings() {
+        String leftHookName = "accessories/plugins/ChangeNodeLevelAction_left.properties";
+        String rightHookName = "accessories/plugins/ChangeNodeLevelAction_right.properties";
+
+        String leftKeyProp = getFrame().getAdjustableProperty("keystroke_accessories/plugins/ChangeNodeLevelAction_left.properties_key");
+        String rightKeyProp = getFrame().getAdjustableProperty("keystroke_accessories/plugins/ChangeNodeLevelAction_right.properties_key");
+
+        KeyStroke leftKeyRaw = (leftKeyProp == null) ? null : KeyStroke.getKeyStroke(leftKeyProp);
+        KeyStroke leftKeyResolved = (leftKeyProp == null) ? null : Tools.getKeyStroke(leftKeyProp);
+        KeyStroke rightKeyRaw = (rightKeyProp == null) ? null : KeyStroke.getKeyStroke(rightKeyProp);
+        KeyStroke rightKeyResolved = (rightKeyProp == null) ? null : Tools.getKeyStroke(rightKeyProp);
+
+        Action leftAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (getView() == null) {
+                    return;
+                }
+                MindMapNode focused = getSelected();
+                if (focused == null) {
+                    return;
+                }
+                var selecteds = getSelecteds();
+                addHook(focused, selecteds, leftHookName, null);
+            }
+        };
+
+        Action rightAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (getView() == null) {
+                    return;
+                }
+                MindMapNode focused = getSelected();
+                if (focused == null) {
+                    return;
+                }
+                var selecteds = getSelecteds();
+                addHook(focused, selecteds, rightHookName, null);
+            }
+        };
+
+        JRootPane rootPane = getFrame().getJFrame().getRootPane();
+        InputMap inputMap = rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap actionMap = rootPane.getActionMap();
+
+        String leftActionId = "changeNodeLevelLeftHook";
+        String rightActionId = "changeNodeLevelRightHook";
+        actionMap.put(leftActionId, leftAction);
+        actionMap.put(rightActionId, rightAction);
+
+        if (leftKeyRaw != null) {
+            inputMap.put(leftKeyRaw, leftActionId);
+        }
+        
+        if (leftKeyResolved != null) {
+            inputMap.put(leftKeyResolved, leftActionId);
+        }
+        
+        if (rightKeyRaw != null) {
+            inputMap.put(rightKeyRaw, rightActionId);
+        }
+        
+        if (rightKeyResolved != null) {
+            inputMap.put(rightKeyResolved, rightActionId);
+        }
+    }
+
+    private void installLeftRightNodeLevelKeyDispatcher() {
+        if (!Tools.isMacOsX()) {
+            return;
+        }
+        
+        JRootPane rootPane = getFrame().getJFrame().getRootPane();
+        if (rootPane == null) {
+            return;
+        }
+
+        mLeftRightKeyDispatcherKfm = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+        mLeftRightKeyDispatcher = new KeyEventDispatcher() {
+            @Override
+            public boolean dispatchKeyEvent(KeyEvent e) {
+                if (e == null || e.isConsumed() || e.getID() != KeyEvent.KEY_PRESSED) {
+                    return false;
+                }
+                if (!e.isControlDown() && !e.isMetaDown()) {
+                    return false;
+                }
+                if (getView() == null) {
+                    return false;
+                }
+
+                Window win = SwingUtilities.getWindowAncestor(e.getComponent());
+                if (win == null || win != getFrame().getJFrame()) {
+                    return false;
+                }
+
+                final int keyCode = e.getKeyCode();
+                String leftHookName = "accessories/plugins/ChangeNodeLevelAction_left.properties";
+                String rightHookName = "accessories/plugins/ChangeNodeLevelAction_right.properties";
+
+                final String hookName;
+                if (keyCode == KeyEvent.VK_LEFT) {
+                    hookName = leftHookName;
+                } else if (keyCode == KeyEvent.VK_RIGHT) {
+                    hookName = rightHookName;
+                } else {
+                    return false;
+                }
+
+                MindMapNode focused = getSelected();
+                if (focused == null) {
+                    return false;
+                }
+                
+                List<MindMapNode> selecteds = getSelecteds();
+                addHook(focused, selecteds, hookName, null);
+                return true;
+            }
+        };
+        mLeftRightKeyDispatcherKfm.addKeyEventDispatcher(mLeftRightKeyDispatcher);
+    }
 	/**
 	 * @author foltin
 	 * @date 19.11.2013
@@ -818,6 +951,9 @@ public class MindMapController extends ControllerAdapter implements
 	public void startupController() {
 		super.startupController();
 		getToolBar().startup();
+        installLeftRightNodeLevelKeyBindings();
+        installLeftRightNodeLevelKeyDispatcher();
+
 		HookFactory hookFactory = getHookFactory();
 		List<RegistrationContainer> pluginRegistrations = hookFactory.getRegistrations();
 		logger.fine("mScheduledActions are executed: " + pluginRegistrations.size());
@@ -863,6 +999,12 @@ public class MindMapController extends ControllerAdapter implements
 
 	public void shutdownController() {
 		super.shutdownController();
+        if (mLeftRightKeyDispatcherKfm != null && mLeftRightKeyDispatcher != null) {
+            mLeftRightKeyDispatcherKfm.removeKeyEventDispatcher(mLeftRightKeyDispatcher);
+            mLeftRightKeyDispatcher = null;
+            mLeftRightKeyDispatcherKfm = null;
+        }
+        
 		for (HookRegistration registrationInstance : mRegistrations) {
 			registrationInstance.deRegister();
 		}

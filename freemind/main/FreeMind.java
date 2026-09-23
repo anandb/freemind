@@ -744,7 +744,7 @@ public class FreeMind extends JFrame implements FreeMindMain, ActionListener {
 						SEGOE_UI_PLAIN_12);
 			}
 			IFreeMindSplash splash = null;
-			frame.checkForAnotherInstance(args);
+			// frame.checkForAnotherInstance(args);
 			frame.initServer();
 			final FeedBack feedBack;
 			splash = new FreeMindSplashModern(frame);

@@ -94,6 +94,7 @@ import freemind.view.mindmapview.IndependantMapViewCreator;
 import freemind.view.mindmapview.MapView;
 import freemind.view.mindmapview.NodeView;
 import freemind.view.mindmapview.ViewFeedback;
+import javax.swing.JComponent;
 
 /**
  * Derive from this class to implement the Controller for your mode. Overload
@@ -685,26 +686,47 @@ public abstract class ControllerAdapter extends MapFeedbackAdapter implements Mo
 	}
 
 	/** @return returns the new JMenuItem. */
-	protected JMenuItem add(JMenu menu, Action action, String keystroke) {
-		JMenuItem item = menu.add(action);
-		item.setAccelerator(Tools.getKeyStroke(getFrame()
-				.getAdjustableProperty(keystroke)));
-		return item;
-	}
+	   protected JMenuItem add(JMenu menu, Action action, String keystroke) {
+        JMenuItem item = menu.add(action);
+        item.setAccelerator(Tools.getKeyStroke(getFrame()
+                .getAdjustableProperty(keystroke)));
+        String keyProperty = getFrame().getAdjustableProperty(keystroke);
+        bindMetaEquivalentsOnMac(keyProperty, action);
+        return item;
+    }
+
+    private void bindMetaEquivalentsOnMac(String keyProperty, Action action) {
+        if (Tools.isMacOsX() && keyProperty != null
+                && keyProperty.toLowerCase().startsWith("control")) {
+            String metaKeyProperty = keyProperty.replaceFirst("(?i)^control\\b", "meta");
+            KeyStroke metaKeyStroke = KeyStroke.getKeyStroke(metaKeyProperty);
+            if (metaKeyStroke != null) {
+                String actionId = (String) action.getValue(Action.NAME);
+                if (actionId == null || actionId.trim().isEmpty()) {
+                    actionId = action.getClass().getName() + "#" + metaKeyProperty;
+                }
+                getFrame().getJFrame().getRootPane()
+                        .getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                        .put(metaKeyStroke, actionId);
+                getFrame().getJFrame().getRootPane()
+                        .getActionMap().put(actionId, action);
+            }
+        }
+    }
 
 	/**
 	 * @return returns the new JMenuItem.
 	 * @param keystroke
 	 *            can be null, if no keystroke should be assigned.
 	 */
-	protected JMenuItem add(StructuredMenuHolder holder, String category,
-			Action action, String keystroke) {
+	protected JMenuItem add(StructuredMenuHolder holder, String category, Action action, String keystroke) {
 		JMenuItem item = holder.addAction(action, category);
-		if (keystroke != null) {
-			String keyProperty = getFrame().getAdjustableProperty(keystroke);
-			logger.finest("Found key stroke: " + keyProperty);
-			item.setAccelerator(Tools.getKeyStroke(keyProperty));
-		}
+        if (keystroke != null) {
+            String keyProperty = getFrame().getAdjustableProperty(keystroke);
+            logger.finest("Found key stroke: " + keyProperty);
+            item.setAccelerator(Tools.getKeyStroke(keyProperty));
+            bindMetaEquivalentsOnMac(keyProperty, action);
+        }
 		return item;
 	}
 
@@ -718,8 +740,9 @@ public abstract class ControllerAdapter extends MapFeedbackAdapter implements Mo
 		JCheckBoxMenuItem item = (JCheckBoxMenuItem) holder.addMenuItem(
 				new JCheckBoxMenuItem(action), category);
 		if (keystroke != null) {
-			item.setAccelerator(Tools.getKeyStroke(getFrame()
-					.getAdjustableProperty(keystroke)));
+            String keyProperty = getFrame().getAdjustableProperty(keystroke);
+			item.setAccelerator(Tools.getKeyStroke(keyProperty));
+            bindMetaEquivalentsOnMac(keyProperty, action);
 		}
 		return item;
 	}
@@ -729,8 +752,9 @@ public abstract class ControllerAdapter extends MapFeedbackAdapter implements Mo
 		JRadioButtonMenuItem item = (JRadioButtonMenuItem) holder.addMenuItem(
 				new JRadioButtonMenuItem(action), category);
 		if (keystroke != null) {
-			item.setAccelerator(Tools.getKeyStroke(getFrame()
-					.getAdjustableProperty(keystroke)));
+            String keyProperty = getFrame().getAdjustableProperty(keystroke);
+			item.setAccelerator(Tools.getKeyStroke(keyProperty));
+            bindMetaEquivalentsOnMac(keyProperty, action);
 		}
 		item.setSelected(isSelected);
 		return item;

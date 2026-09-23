@@ -267,6 +267,7 @@ public class EditAction extends MindmapAction {
 			// there was previous editing.
 			mCurrentEditDialog.closeEdit();
 			mCurrentEditDialog = null;
+            mMindMapController.setBlocked(false);
 		}
 	}
 

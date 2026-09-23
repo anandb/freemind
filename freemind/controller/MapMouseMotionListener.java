@@ -101,17 +101,20 @@ public class MapMouseMotionListener implements MouseMotionListener,
 		if (e.isPopupTrigger()) { // start the move, when the user press the
 									// mouse (PN)
 			handlePopup(e);
-		} else if (mReceiver != null)
+            e.consume();
+		} else if (mReceiver != null) {
 			mReceiver.mousePressed(e);
-		e.consume();
-	}
+        }
+    }
 
 	public void mouseReleased(MouseEvent e) {
 		if (mReceiver != null) {
 			mReceiver.mouseReleased(e);
 		}
 		handlePopup(e);
-		e.consume();
+        if (e.isPopupTrigger()) {
+            e.consume();
+        }
 		c.getView().setMoveCursor(false); // release the cursor to default
 											// (PN)
 	}

@@ -27,7 +27,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.Method;
 import java.net.Authenticator;
 import java.net.PasswordAuthentication;
 import java.net.URL;
@@ -51,52 +50,26 @@ public class FreeMindStarter {
 	/** Doubled variable on purpose. See header of this class. */
 	static final String JAVA_VERSION = System.getProperty("java.version");
 
-	public static void main(String[] args) {
-		FreeMindStarter starter = new FreeMindStarter();
-		// First check version of Java
-		starter.checkJavaVersion();
-		Properties defaultPreferences = starter.readDefaultPreferences();
-		starter.createUserDirectory(defaultPreferences);
-		Properties userPreferences =
-				starter.readUsersPreferences(defaultPreferences);
-		starter.setDefaultLocale(userPreferences);
+	   public static void main(String[] args) {
+        try {
+            FreeMindStarter starter = new FreeMindStarter();            
+            Properties defaultPreferences = starter.readDefaultPreferences();
+            starter.createUserDirectory(defaultPreferences);
+            Properties userPreferences = starter.readUsersPreferences(defaultPreferences);
+            starter.setDefaultLocale(userPreferences);
+            
+            // workaround for java bug http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=7075600
+            System.setProperty("java.util.Arrays.useLegacyMergeSort", "true");
+            FreeMind.main(args, defaultPreferences, userPreferences, starter.getUserPreferencesFile(defaultPreferences));
 
-		// HiDPI: detect and set sun.java2d.uiScale BEFORE any AWT/Swing init.
-		// This must happen before Toolkit.getDefaultToolkit() to ensure the
-		// Java2D rendering pipeline uses the correct scale for hit-testing
-		// and coordinate mapping (fixes mouse pointer drift on HiDPI displays).
-		starter.initHiDpiScaling(userPreferences);
-
-		// workaround for java bug http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=7075600
-		System.setProperty("java.util.Arrays.useLegacyMergeSort", "true");
-		
-		try {
-		FreeMind.main(args, defaultPreferences, userPreferences,
-		 starter.getUserPreferencesFile(defaultPreferences));
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			JOptionPane.showMessageDialog(null,
-					"freemind.main.FreeMind can't be started: " + e.getLocalizedMessage()+"\n" + Tools.getStacktrace(e),
-					"Startup problem", JOptionPane.ERROR_MESSAGE);
-			System.exit(1);
-		}
-	}
-
-	private void checkJavaVersion() {
-		System.out.println("Checking Java Version...");
-		if (JAVA_VERSION.compareTo("1.6.0") < 0) {
-			String message = "Warning: FreeMind requires version Java 1.6.0 or higher (your version: "
-					+ JAVA_VERSION
-					+ ", installed in "
-					+ System.getProperty("java.home") + ").";
-			System.err.println(message);
-			JOptionPane.showMessageDialog(null, message, "FreeMind",
-					JOptionPane.WARNING_MESSAGE);
-			System.exit(1);
-		}
-		System.out.println("Checking Java Version done.");
-	}
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null,
+                    "freemind.main.FreeMind can't be started: " + e.getLocalizedMessage() + "\n" + Tools.getStacktrace(e),
+                    "Startup problem", JOptionPane.ERROR_MESSAGE);
+            System.exit(1);
+        }
+    }
 
 	private void createUserDirectory(Properties pDefaultProperties) {
 		File userPropertiesFolder = new File(

@@ -1211,7 +1211,7 @@ public class Tools {
 		// Register keystroke
 		dialog.getRootPane()
 				.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
-				.put(KeyStroke.getKeyStroke(keyStroke),
+				.put(Tools.getKeyStroke(keyStroke),
 						action.getValue(Action.NAME));
 
 		// Register action
