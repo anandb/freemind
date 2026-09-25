@@ -36,6 +36,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.JComponent;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
@@ -87,25 +88,44 @@ public class MenuBar extends JMenuBar {
 		if (logger == null) {
 			logger = controller.getFrame().getLogger(this.getClass().getName());
 		}
-		// Ctrl+L to focus search field on the icon toolbar
-		KeyStroke ctrlL = KeyStroke.getKeyStroke(KeyEvent.VK_L,
-				freemind.main.Tools.getModifierMask());
-		getInputMap(WHEN_IN_FOCUSED_WINDOW).put(ctrlL, "focusIconSearch");
-		getActionMap().put("focusIconSearch", new AbstractAction() {
+		// Ctrl+L (Cmd+L on macOS) to focus the search field on the icon toolbar.
+		// The binding is registered on the menu bar and on the frame's root pane
+		// (WHEN_IN_FOCUSED_WINDOW), because the menu bar alone is not always part
+		// of the key-binding lookup of the focused window.
+		final AbstractAction focusIconSearch = new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				ModeController mc = c.getModeController();
 				if (mc instanceof MindMapController) {
 					((MindMapController) mc).focusSearchBox();
 				}
 			}
-		});
+		};
+		int[] masks = { freemind.main.Tools.getModifierMask(),
+				java.awt.event.InputEvent.CTRL_DOWN_MASK };
+		for (int mask : masks) {
+			KeyStroke ctrlL = KeyStroke.getKeyStroke(KeyEvent.VK_L, mask);
+			if (ctrlL == null) {
+				continue;
+			}
+			getInputMap(WHEN_IN_FOCUSED_WINDOW).put(ctrlL, "focusIconSearch");
+			if (controller.getFrame().getJFrame() != null) {
+				controller.getFrame().getJFrame().getRootPane()
+						.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+						.put(ctrlL, "focusIconSearch");
+			}
+		}
+		getActionMap().put("focusIconSearch", focusIconSearch);
+		if (controller.getFrame().getJFrame() != null) {
+			controller.getFrame().getJFrame().getRootPane().getActionMap()
+					.put("focusIconSearch", focusIconSearch);
+		}
 	}// Constructor
 
 
 
 	/**
 	 * This is the only public method. It restores all menus.
-	 * 
+	 *
 	 * @param newModeController
 	 */
 	public void updateMenus(ModeController newModeController) {
@@ -441,7 +461,7 @@ public class MenuBar extends JMenuBar {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see javax.swing.JMenuBar#processKeyBinding(javax.swing.KeyStroke,
 	 * java.awt.event.KeyEvent, int, boolean)
 	 */

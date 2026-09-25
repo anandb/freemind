@@ -685,21 +685,44 @@ public class MindMapToolBar extends FreeMindToolBar implements ZoomListener {
 		fontSize_IgnoreChangeEvent = false;
 	}
 
+	/**
+	 * Cached left toolbar panel. It must be created only once: the caller
+	 * (Controller) asks for it repeatedly (on mode change, on visibility toggle)
+	 * and every {@code new} panel would re-parent the search box into a detached
+	 * container, which breaks {@link #focusSearchBox()}.
+	 */
+	private JPanel leftToolBar;
+
 	Component getLeftToolBar() {
+		if (leftToolBar != null) {
+			return leftToolBar;
+		}
 		JPanel panel = new JPanel(new BorderLayout());
 		JPanel topPanel = new JPanel(new BorderLayout());
 		topPanel.add(searchBox, BorderLayout.NORTH);
 		topPanel.add(removeToolBar, BorderLayout.CENTER);
 		panel.add(topPanel, BorderLayout.NORTH);
 		panel.add(iconToolBarScrollPane, BorderLayout.CENTER);
+		leftToolBar = panel;
 		return panel;
 	}
 
 	public void focusSearchBox() {
-		if (searchBox != null) {
-			searchBox.requestFocusInWindow();
-			searchBox.selectAll();
+		if (searchBox == null) {
+			return;
 		}
+		// Make sure the box is really attached and showing, otherwise
+		// requestFocusInWindow() is a no-op.
+		java.awt.Container parent = searchBox.getParent();
+		if (parent != null && !parent.isShowing()) {
+			parent.setVisible(true);
+		}
+		if (!searchBox.isShowing()) {
+			return;
+		}
+		searchBox.requestFocusInWindow();
+		searchBox.requestFocus();
+		searchBox.selectAll();
 	}
 
 	public void selectFontName(String fontName) // (DiPo)
